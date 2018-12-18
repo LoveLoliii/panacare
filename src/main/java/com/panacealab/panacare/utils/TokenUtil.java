@@ -16,9 +16,15 @@ import java.util.logging.Logger;
 
 public class TokenUtil {
     private static Logger logger = Logger.getLogger("com.panacealab.panacare.utils.TokenUtil");
+    /***
+     * 验证token是否唯一
+     * */
+    public static boolean  verifyTokenInRedis(String token){
+        String user_uniq_id = getTokenValues(token);
 
-
-    public static String  verifyToken(String token){
+        return false;
+    }
+    public static boolean  verifyToken(String token){
         Properties p =new Properties();
         try {
             p.load(TokenUtil.class.getResourceAsStream("/configure.properties"));
@@ -31,24 +37,24 @@ public class TokenUtil {
             DecodedJWT jwt = verifier.verify(token);
             //验证有效
             logger.info("token verified");
-            return "verified";
+            return true;
         } catch (JWTVerificationException exception){
             //Invalid signature/claims
             logger.info("Invalid signatures/claims");
-            return "invalid";
+            return false;
         } catch (IOException e) {
             e.printStackTrace();
             logger.info("properties error");
-            return "properties error";
+            return false;
         }
 
     }
 
-    public static Map getTokenValues (String token){
-        Map rs;
+    public static String getTokenValues (String token){
+        String rs;
         try {
             DecodedJWT jwt = JWT.decode(token);
-            rs = jwt.getClaims();
+            rs = jwt.getAudience().get(0);
             logger.info(rs.toString());
         } catch (JWTDecodeException exception){
             //Invalid token

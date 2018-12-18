@@ -9,6 +9,7 @@ package com.panacealab.panacare.entity;
 public class UserInfo {
 
     private Integer user_id;
+    private String user_uniq_id;
     private String user_name;
     private String user_pwd;
     private String user_sex;
@@ -28,6 +29,14 @@ public class UserInfo {
 
     public void setUser_id(Integer user_id) {
         this.user_id = user_id;
+    }
+
+    public String getUser_uniq_id() {
+        return user_uniq_id;
+    }
+
+    public void setUser_uniq_id(String user_uniq_id) {
+        this.user_uniq_id = user_uniq_id;
     }
 
     public String getUser_name() {

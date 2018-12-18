@@ -7,6 +7,7 @@ import com.panacealab.panacare.entity.MailValidate;
 import com.panacealab.panacare.entity.UserInfo;
 import com.panacealab.panacare.utils.MailSendUtil;
 import com.panacealab.panacare.utils.MailTool;
+import com.panacealab.panacare.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -160,20 +161,20 @@ public class SignServiceImpl implements SignService {
                     //改变状态 返回成功信息
                     //TODO change state
                     signDao.update(0,mail);
-                    rs = "success";
+                    rs = "542";
                     return rs;
                 } else {
                     logger.info("验证码过期");
-                    rs = "fail";
+                    rs = "545";
                     return rs;
                 }
             }else{
-                rs = "fail";
+                rs = "544";
                 return rs;
             }
         }  else {
             logger.info("未查询到数据库内有记录。");
-            rs = "fail";
+            rs = "543";
             return rs;
         }
 
@@ -185,27 +186,27 @@ public class SignServiceImpl implements SignService {
         //检查邮箱是否已经被注册
         List<UserInfo> availableRs = signDao.checkMailAvailable(mail);
         if(availableRs.size()>0){
-            return "邮箱已存在。";
+            return "548";
         }
 
         //验证邮箱
         String rs = verifyMail(mail,code);
-        if("success".equals(rs)){
+        if("542".equals(rs)){
             //验证成功 写入用户信息到数据库
             //mybatis 存储 entity
 
             //mybatis 不能重载
             try {
+                u.setUser_uniq_id(StringUtil.getUUID());
                 int irs = signDao.insertUser(u);
                 logger.info("insertUser的返回结果是：" + irs);
-                rs = "注册成功";
+                rs = "547";
             }catch (Exception e){
-                rs="注册失败";//无法catch
+                e.printStackTrace();
+                logger.error("注册数据库错误：{}",e.getMessage());
+                rs="546";//无法catch
             }
 
-        }else{
-            //验证失败。
-            rs = "验证码错误";
         }
 
         return rs;

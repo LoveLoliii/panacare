@@ -30,8 +30,8 @@ public interface SignDao {
     int update( int value1,String value2);
 
     //""与null是不是会有问题
-    @Insert("INSERT INTO user_info(user_name,user_pwd,user_sex,user_both,user_mail,user_register_time,user_condition_code,user_referee,user_phone_num,user_address)VALUES(" +
-            "#{user_name},#{user_pwd},#{user_sex},#{user_both},#{user_mail},#{user_register_time},#{user_condition_code}," +
+    @Insert("INSERT INTO user_info(user_uniq_id,user_name,user_pwd,user_sex,user_both,user_mail,user_register_time,user_condition_code,user_referee,user_phone_num,user_address)VALUES(" +
+            "#{user_uniq_id},#{user_name},#{user_pwd},#{user_sex},#{user_both},#{user_mail},#{user_register_time},#{user_condition_code}," +
             "#{user_referee},#{user_phone_num},#{user_address})")
     //@Result(property = "user_id",column = "user_id")
     int insertUser(UserInfo user_info);

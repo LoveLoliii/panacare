@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panacealab.panacare.dao.RepairDao">
+    <insert id="insert" parameterType="com.panacealab.panacare.entity.RepairInfo">
+       insert into repair_info (user_uniq_id,repair_problem_description,repair_file_name,repair_create_time,
+        repair_handling_state)values(#{user_uniq_id},#{repair_problem_description},#{repair_file_name},#{repair_create_time},"未处理")
+    </insert>
+</mapper>

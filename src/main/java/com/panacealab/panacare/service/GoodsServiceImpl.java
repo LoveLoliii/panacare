@@ -17,7 +17,7 @@ public class GoodsServiceImpl implements GoodsService{
         //
         Map rsMap = new HashMap();
         List<GoodsInfo> goodsInfoList = goodsDao.queryAll();
-        rsMap.put("state",1);
+        rsMap.put("state","455");
         rsMap.put("goods_info",goodsInfoList);
 
         return rsMap;
