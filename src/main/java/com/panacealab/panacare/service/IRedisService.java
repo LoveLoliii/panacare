@@ -15,6 +15,8 @@ import java.util.concurrent.TimeUnit;
 public abstract class IRedisService<T> {
     @Autowired
     protected RedisTemplate<String, Object> redisTemplate;
+    @Autowired
+    protected StringRedisTemplate stringRedisTemplate;
     @Resource
     protected HashOperations<String, String, T> hashOperations;
     @Resource
@@ -43,9 +45,10 @@ public abstract class IRedisService<T> {
 
       //  hashOperations.put(key, key, (T) token);
         try{
-           ValueOperations<String, Object> valueOps = redisTemplate.opsForValue();
-            valueOps.set(key,token);
-
+         //  ValueOperations<String, Object> valueOps = redisTemplate.opsForValue();
+         //  valueOps.set(key,token);
+         ValueOperations valueOperations =    stringRedisTemplate.opsForValue();
+         valueOperations.set(key,token);
         }catch (Exception e){
 
         }
@@ -53,7 +56,8 @@ public abstract class IRedisService<T> {
 
       // valueOperations.set(key,token);
         if (expire != -1) {
-            redisTemplate.expire(key, expire, TimeUnit.SECONDS);
+           // redisTemplate.expire(key, expire, TimeUnit.SECONDS);
+            stringRedisTemplate.expire(key,expire,TimeUnit.SECONDS);
         }
     }
 
@@ -64,7 +68,8 @@ public abstract class IRedisService<T> {
      */
     public void remove(String key) {
         //hashOperations.delete(getRedisKey(), key);
-        redisTemplate.delete(key);
+       // redisTemplate.delete(key);
+        stringRedisTemplate.delete(key);
     }
 
     /**
@@ -73,9 +78,11 @@ public abstract class IRedisService<T> {
      * @param key 查询的key
      * @return
      */
-    public T get(String key) {
+    public String get(String key) {
         //return hashOperations.get(getRedisKey(), key);
-        return (T) valueOperations.get(key);
+        //
+        // return (T) valueOperations.get(key);
+        return stringRedisTemplate.opsForValue().get(key);
     }
 
     /**
@@ -85,6 +92,7 @@ public abstract class IRedisService<T> {
      */
     public List<T> getAll() {
         return hashOperations.values(getRedisKey());
+
     }
 
     /**
@@ -93,6 +101,7 @@ public abstract class IRedisService<T> {
      * @return
      */
     public Set<String> getKeys() {
+       // stringRedisTemplate.opsForValue().getOperations().get
         return hashOperations.keys(getRedisKey());
     }
 
@@ -103,7 +112,8 @@ public abstract class IRedisService<T> {
      * @return
      */
     public boolean isKeyExists(String key) {
-        return  redisTemplate.hasKey(key);
+        //return  redisTemplate.hasKey(key);
+        return stringRedisTemplate.hasKey(key);
         //return hashOperations.hasKey(getRedisKey(), key);
     }
 

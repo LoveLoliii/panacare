@@ -72,11 +72,10 @@ public class LoginServiceImpl implements LoginService {
                     state = "553";
 
                     //更新redis数据
-                    //删除与用户uniq_id相同的key 不存在则删除
+                    //删除与用户uniq_id相同的key
                     iRedisService.remove(userInfo.getUser_uniq_id());
                     //放入新的key/value
-                    Set v = new HashSet();
-                    v.add(token);
+
                     iRedisService.put(userInfo.getUser_uniq_id(),token,Integer.valueOf(ex));
 
 

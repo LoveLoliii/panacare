@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panacealab.panacare.dao.TaskDao">
+    <update id="task_record_id" parameterType="com.panacealab.panacare.entity.TaskRecord">
+        update task_record
+        <set>
+            <if test="task_progress != null">task_progress=#{task_progress},</if>
+            <if test="task_finish_time != null">task_finish_time=#{task_finish_time},</if>
+            <if test="task_reward_get_time != null">task_reward_get_time=#{task_reward_get_time},</if>
+            <if test="task_reward_get_state != null">task_reward_get_state=#{task_reward_get_state}</if>
+        </set>
+        where task_record_id=#{task_record_id}
+    </update>
+</mapper>

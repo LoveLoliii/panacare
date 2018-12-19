@@ -21,6 +21,7 @@ public class UserInfo {
     private String user_phone_num;
     private String user_address;
     private Integer user_validity;
+    private Integer user_authority;
 /*    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)*/
     public Integer getUser_id() {
@@ -125,6 +126,14 @@ public class UserInfo {
 
     public void setUser_validity(Integer user_validity) {
         this.user_validity = user_validity;
+    }
+
+    public Integer getUser_authority() {
+        return user_authority;
+    }
+
+    public void setUser_authority(Integer user_authority) {
+        this.user_authority = user_authority;
     }
 
     @Override
