@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panacealab.panacare.dao.RecommendDao">
+<!--    <update id="recommend_reward_record_id" parameterType="com.panacealab.panacare.entity.RecommendRewardRecord">
+        update task_record
+        <set>
+            <if test="task_progress != null">task_progress=#{task_progress},</if>
+            <if test="task_finish_time != null">task_finish_time=#{task_finish_time},</if>
+            <if test="task_reward_get_time != null">task_reward_get_time=#{task_reward_get_time},</if>
+            <if test="recommend_reward_record_content != null">recommend_reward_record_content=#{recommend_reward_record_content}</if>
+        </set>
+        where user_uniq_id=#{user_uniq_id}
+    </update>-->
+    <insert id="recommend_reward_record_id" parameterType="com.panacealab.panacare.entity.RecommendRewardRecord">
+        insert recommend_reward_record
+        <set>
+            <if test="user_uniq_id != null">user_uniq_id=#{user_uniq_id},</if>
+            <if test="recommend_reward_id != null">recommend_reward_id=#{recommend_reward_id},</if>
+            <if test="recommend_reward_record_sendtime != null">recommend_reward_record_sendtime=#{recommend_reward_record_sendtime},</if>
+            <if test="recommend_reward_record_getstate != null">recommend_reward_record_getstate=#{recommend_reward_record_getstate}</if>
+        </set>
+    </insert>
+</mapper>
