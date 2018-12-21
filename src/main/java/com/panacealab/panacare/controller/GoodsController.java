@@ -1,5 +1,6 @@
 package com.panacealab.panacare.controller;
 
+import com.panacealab.panacare.entity.GoodsInfo;
 import com.panacealab.panacare.service.GoodsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,14 +33,16 @@ public class GoodsController {
 
     /****
      * @describe 添加商品信息
-     *
+     *商品信息并非用户进行操作 web端后台管理
      *
      * */
     @RequestMapping(path = "addGoodsInfo",method = RequestMethod.POST)
-    private Map addGoodsInfo(){
+    private String addGoodsInfo(@RequestParam GoodsInfo goodsInfo){
+        //TODO 进行验证用户
 
 
-        return null;
+
+        return goodsService.addGoodsInfo(goodsInfo);
 
     }
 

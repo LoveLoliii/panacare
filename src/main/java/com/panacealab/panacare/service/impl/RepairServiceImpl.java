@@ -1,7 +1,8 @@
-package com.panacealab.panacare.service;
+package com.panacealab.panacare.service.impl;
 
 import com.panacealab.panacare.dao.RepairDao;
 import com.panacealab.panacare.entity.RepairInfo;
+import com.panacealab.panacare.service.RepairService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -20,7 +20,13 @@ public class GoodsServiceImpl implements GoodsService {
         List<GoodsInfo> goodsInfoList = goodsDao.queryAll();
         rsMap.put("state","455");
         rsMap.put("goods_info",goodsInfoList);
-
         return rsMap;
+    }
+
+    @Override
+    public String addGoodsInfo(GoodsInfo goodsInfo) {
+
+        int rs = goodsDao.insert(goodsInfo);
+        return rs==0?"":"";
     }
 }

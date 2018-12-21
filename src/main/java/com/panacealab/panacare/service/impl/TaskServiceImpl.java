@@ -1,8 +1,9 @@
-package com.panacealab.panacare.service;
+package com.panacealab.panacare.service.impl;
 
 import com.panacealab.panacare.dao.TaskDao;
 import com.panacealab.panacare.entity.TaskInfo;
 import com.panacealab.panacare.entity.UserInfo;
+import com.panacealab.panacare.service.TaskService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

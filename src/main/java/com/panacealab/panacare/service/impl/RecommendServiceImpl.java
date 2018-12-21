@@ -1,10 +1,11 @@
-package com.panacealab.panacare.service;
+package com.panacealab.panacare.service.impl;
 
 import com.panacealab.panacare.dao.RecommendDao;
 import com.panacealab.panacare.entity.RecommendInfo;
 import com.panacealab.panacare.entity.RecommendReward;
 import com.panacealab.panacare.entity.RecommendRewardRecord;
 import com.panacealab.panacare.entity.UserInfo;
+import com.panacealab.panacare.service.RecommendService;
 import com.panacealab.panacare.utils.SHATool;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,7 +13,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.*;
 @Service
-public class RecommendServiceImpl implements RecommendService{
+public class RecommendServiceImpl implements RecommendService {
     @Autowired
     private RecommendDao recommendDao;
     @Override

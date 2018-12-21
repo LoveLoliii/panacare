@@ -2,6 +2,7 @@ package com.panacealab.panacare.entity;
 
 public class GoodsInfo {
     private Integer goods_id;
+    private String goods_uniq_id;
     private String goods_name;
     private String goods_subscribe_uprice;
     private String goods_onsale_subscribe_uprice;
@@ -23,6 +24,14 @@ public class GoodsInfo {
 
     public void setGoods_id(Integer goods_id) {
         this.goods_id = goods_id;
+    }
+
+    public String getGoods_uniq_id() {
+        return goods_uniq_id;
+    }
+
+    public void setGoods_uniq_id(String goods_uniq_id) {
+        this.goods_uniq_id = goods_uniq_id;
     }
 
     public String getGoods_name() {
@@ -133,6 +142,7 @@ public class GoodsInfo {
     public String toString() {
         return "GoodsInfo{" +
                 "goods_id=" + goods_id +
+                ", goods_uniq_id='" + goods_uniq_id + '\'' +
                 ", goods_name='" + goods_name + '\'' +
                 ", goods_subscribe_uprice='" + goods_subscribe_uprice + '\'' +
                 ", goods_onsale_subscribe_uprice='" + goods_onsale_subscribe_uprice + '\'' +

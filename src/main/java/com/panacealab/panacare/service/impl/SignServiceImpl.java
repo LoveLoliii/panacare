@@ -1,10 +1,11 @@
-package com.panacealab.panacare.service;
+package com.panacealab.panacare.service.impl;
 
 import com.panacealab.panacare.dao.LoginDao;
 import com.panacealab.panacare.dao.SignDao;
 import com.panacealab.panacare.entity.MailInfo;
 import com.panacealab.panacare.entity.MailValidate;
 import com.panacealab.panacare.entity.UserInfo;
+import com.panacealab.panacare.service.SignService;
 import com.panacealab.panacare.utils.MailSendUtil;
 import com.panacealab.panacare.utils.MailTool;
 import com.panacealab.panacare.utils.StringUtil;
