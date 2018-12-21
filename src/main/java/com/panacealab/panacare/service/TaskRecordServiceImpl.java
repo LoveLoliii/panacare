@@ -3,7 +3,9 @@ package com.panacealab.panacare.service;
 import com.panacealab.panacare.dao.TaskRecordDao;
 import com.panacealab.panacare.entity.TaskRecord;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class TaskRecordServiceImpl implements TaskRecordService {
     @Autowired
     private TaskRecordDao taskRecordDao;

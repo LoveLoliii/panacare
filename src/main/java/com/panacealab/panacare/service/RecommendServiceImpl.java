@@ -7,10 +7,11 @@ import com.panacealab.panacare.entity.RecommendRewardRecord;
 import com.panacealab.panacare.entity.UserInfo;
 import com.panacealab.panacare.utils.SHATool;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
 import java.util.*;
-
+@Service
 public class RecommendServiceImpl implements RecommendService{
     @Autowired
     private RecommendDao recommendDao;

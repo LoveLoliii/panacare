@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-@RestController
+@RestController()
 public class RepairController {
     @Autowired
     private RepairService repairService;
