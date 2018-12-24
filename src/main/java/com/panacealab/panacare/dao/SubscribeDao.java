@@ -17,4 +17,6 @@ public interface SubscribeDao {
     //对于直接插入对象 可能不行 需要具体到属性进行插入 考虑使用xml
     @Insert("INSERT INTO subscribe_info")
     int insert(SubscribeInfo subscribeInfo);
+
+    int update(SubscribeInfo subscribeInfo);
 }

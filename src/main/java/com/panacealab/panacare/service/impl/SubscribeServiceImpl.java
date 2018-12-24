@@ -63,4 +63,12 @@ public class SubscribeServiceImpl implements SubscribeService {
 
         return rs==0?"":"";
     }
+
+    @Override
+    public String modifySubscribeInfo(SubscribeInfo subscribeInfo) {
+        //更新有值的属性
+
+        int rs = subscribeDao.update(subscribeInfo);
+        return rs==0?"":"";
+    }
 }

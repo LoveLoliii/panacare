@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panacealab.panacare.dao.SubscribeDao">
+    <update id="update_subscribe_info" parameterType="com.panacealab.panacare.entity.SubscribeInfo">
+        update task_record
+        <set>
+            <if test="goods_uniq_id != null">goods_uniq_id=#{goods_uniq_id},</if>
+            <if test="subscribe_mount != null">subscribe_mount=#{subscribe_mount},</if>
+            <if test="subscribe_state != null">subscribe_state=#{subscribe_state},</if>
+        </set>
+        where subscribe_id=#{subscribe_id}
+    </update>
+</mapper>

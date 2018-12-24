@@ -3,6 +3,7 @@ package com.panacealab.panacare.controller;
 import com.panacealab.panacare.entity.RecommendRewardRecord;
 import com.panacealab.panacare.service.IRedisService;
 import com.panacealab.panacare.service.RecommendService;
+import com.panacealab.panacare.utils.StateCode;
 import com.panacealab.panacare.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,10 +31,10 @@ public class RecommendController {
      * */
     private String verifyToken(String token) {
         String user_uniq_id;
-        if (token == null) {
-            return "554";//状态码详情查看api文档
+        if (token == null || "".equals(token)) {
+            return StateCode.Login_With_Not_Token;//状态码详情查看api文档
         } else if (!TokenUtil.verifyToken(token)) {
-            return "555";
+            return StateCode.Token_Verify_Fail;
         } else {
             //验证token唯一性
             //获取用户uniq_id
@@ -41,12 +42,12 @@ public class RecommendController {
             //查询redis使用存在该用户
             if (!iRedisService.isKeyExists(user_uniq_id)) {
                 //不存在用户token
-                return "556";
+                return StateCode.Token_Not_In_Redis;
             }
             //存在token 进行对比
             if (!token.equals(iRedisService.get(user_uniq_id))) {
                 //token 不相同 验证不通过
-                return "557";
+                return StateCode.Token_Diff_With_Redis;
 
             }
         }

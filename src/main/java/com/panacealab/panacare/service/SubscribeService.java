@@ -10,4 +10,6 @@ public interface SubscribeService {
     Map getSubscribeInfoAll();
 
     String addSubscribeInfo(SubscribeInfo subscribeInfo);
+
+    String modifySubscribeInfo(SubscribeInfo subscribeInfo);
 }
