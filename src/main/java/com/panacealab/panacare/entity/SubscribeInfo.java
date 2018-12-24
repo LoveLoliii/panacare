@@ -4,7 +4,7 @@ public class SubscribeInfo {
     private Integer subscribe_id;
     private Integer goods_uniq_id;
     private String user_uniq_id;
-    private Integer subscribe_mount;
+  //  private Integer subscribe_mount;
     private String subscribe_state;
 
 
@@ -32,13 +32,13 @@ public class SubscribeInfo {
         this.goods_uniq_id = goods_uniq_id;
     }
 
-    public Integer getSubscribe_mount() {
+    /*public Integer getSubscribe_mount() {
         return subscribe_mount;
     }
 
     public void setSubscribe_mount(Integer subscribe_mount) {
         this.subscribe_mount = subscribe_mount;
-    }
+    }*/
 
     public String getSubscribe_state() {
         return subscribe_state;
@@ -54,7 +54,7 @@ public class SubscribeInfo {
                 "subscribe_id=" + subscribe_id +
                 ", user_uniq_id='" + user_uniq_id + '\'' +
                 ", goods_uniq_id=" + goods_uniq_id +
-                ", subscribe_mount=" + subscribe_mount +
+               // ", subscribe_mount=" + subscribe_mount +
                 ", subscribe_state='" + subscribe_state + '\'' +
                 '}';
     }

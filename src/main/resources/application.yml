@@ -6,6 +6,7 @@ mybatis:
 logging:
   level:
     com.panacealab.panacare.*: info
+    com.*.*.*: info
 
 
 # Redis数据库索引（默认为0）

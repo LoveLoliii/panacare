@@ -51,7 +51,7 @@ public class RecommendController {
 
             }
         }
-        return "000";
+        return StateCode.Initial_Code;
     }
 
     //获取特征码
@@ -61,7 +61,7 @@ public class RecommendController {
         map.put("state", "000");
         map.put("data", new ArrayList<>());
         String code = verifyToken(token);
-        if(!"000".equals(code)){
+        if(!StateCode.Initial_Code.equals(code)){
             map.put("state",code);
             return map;
         }
@@ -123,7 +123,7 @@ public class RecommendController {
         map.put("state", "000");
         map.put("data", new ArrayList<>());
         String code = verifyToken(token);
-        if (!"000".equals(code)) { //验证失败直接返回
+        if (!StateCode.Initial_Code.equals(code)) { //验证失败直接返回
             map.put("state", code);
             return map;
         }
@@ -138,7 +138,7 @@ public class RecommendController {
     @RequestMapping(path = "addRecommendRewardRecord", method = RequestMethod.POST)
     private String addRecommendRewardRecord(@RequestParam String token,@RequestParam RecommendRewardRecord recommendRewardRecord) {
         String code = verifyToken(token);
-        if (!"000".equals(code)){ //验证失败直接返回
+        if (!StateCode.Initial_Code.equals(code)){ //验证失败直接返回
             return code;
         }
         String rs = recommendService.addRecommendRewardRecord(recommendRewardRecord);
@@ -146,7 +146,7 @@ public class RecommendController {
     }
 
     /***
-     * @Deprecated
+     * @Deprecated error function
      *
      * */
     @RequestMapping(path = "updateRecommendRewardRecord", method = RequestMethod.POST)
