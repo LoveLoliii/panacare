@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panacealab.panacare.dao.OrderDao">
+    <insert id="insert" parameterType="com.panacealab.panacare.entity.OrderInfo">
+        insert into order_info
+        (order_number,goods_uniq_id,user_uniq_id,order_counts,order_state,order_created_time)
+        values (#{order_number},#{goods_uniq_id},#{user_uniq_id},#{order_counts},#{order_state},#{order_created_time})
+    </insert>
+
+    <update id="orderDaoUpdate" parameterType="com.panacealab.panacare.entity.OrderInfo" >
+        update order_info
+        <set>
+            <!--<if test="order_number != null">order_number=#{order_number},</if>-->
+            <!--<if test="goods_uniq_id != null">goods_uniq_id=#{goods_uniq_id},</if>-->
+            <!--<if test="user_uniq_id != null">user_uniq_id=#{user_uniq_id},</if>-->
+            <!--<if test="order_counts != null">order_counts=#{order_counts}</if>-->
+            <if test="order_state != null">order_state=#{order_state}</if>
+            <if test="order_pay_way != null">order_state=#{order_pay_way}</if>
+            <if test="order_finished_time != null">order_created_time=#{order_finished_time}</if>
+        </set>
+    </update>
+</mapper>

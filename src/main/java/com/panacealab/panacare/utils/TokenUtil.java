@@ -9,18 +9,30 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.panacealab.panacare.service.IRedisService;
 import jdk.nashorn.internal.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
-
+@Component
 public class TokenUtil {
     private static Logger logger = Logger.getLogger("com.panacealab.panacare.utils.TokenUtil");
     @Autowired
     private IRedisService iRedisService;
 
+
+    public static TokenUtil tokenUtil;
+    public TokenUtil() {
+    }
+
+    @PostConstruct
+    public void init() {
+        tokenUtil = this;
+        tokenUtil.iRedisService = this.iRedisService;
+    }
     /***
      * 验证token是否唯一
      * */
@@ -63,7 +75,7 @@ public class TokenUtil {
             logger.info(rs.toString());
         } catch (JWTDecodeException exception){
             //Invalid token
-            return "";
+            return StateCode.Token_Verify_Fail;
         }
         return rs;
     }
@@ -81,12 +93,12 @@ public class TokenUtil {
             //获取用户uniq_id
             String user_uniq_id = TokenUtil.getTokenValues(token);
             //查询redis使用存在该用户
-            if (!iRedisService.isKeyExists(user_uniq_id)) {
+            if (!tokenUtil.iRedisService.isKeyExists(user_uniq_id)) {
                 //不存在用户token
                 return StateCode.Token_Not_In_Redis;
             }
             //存在token 进行对比
-            if (!token.equals(iRedisService.get(user_uniq_id))) {
+            if (!token.equals(tokenUtil.iRedisService.get(user_uniq_id))) {
                 //token 不相同 验证不通过
                 return StateCode.Token_Diff_With_Redis;
 

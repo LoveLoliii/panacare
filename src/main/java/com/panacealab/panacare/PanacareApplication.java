@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 /***
@@ -14,7 +15,7 @@ import org.springframework.cache.annotation.EnableCaching;
  * */
 @EnableAutoConfiguration(exclude = {MultipartAutoConfiguration.class})
 //@MapperScan
-
+@EnableTransactionManagement //开启事务
 @EnableCaching //redis
 public class PanacareApplication {
 

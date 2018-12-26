@@ -7,6 +7,7 @@ import com.panacealab.panacare.entity.RecommendRewardRecord;
 import com.panacealab.panacare.entity.UserInfo;
 import com.panacealab.panacare.service.RecommendService;
 import com.panacealab.panacare.utils.SHATool;
+import com.panacealab.panacare.utils.StateCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -71,7 +72,7 @@ public class RecommendServiceImpl implements RecommendService {
 
         if(null==userInfo || "".equals(userInfo)){
             map.put("data","");
-            map.put("state",549);
+            map.put("state", StateCode.User_Not_Exist);
             return map;
         }
         //

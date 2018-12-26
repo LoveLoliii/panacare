@@ -9,7 +9,7 @@ import java.util.List;
 @Mapper
 public interface GoodsDao {
 
-    @Select("SELECT * FROM goods_info")
+
     List<GoodsInfo> queryAll();
     //error
     @Insert("INSERT INTO goods_info")

@@ -2,6 +2,8 @@ package com.panacealab.panacare.controller;
 
 import com.panacealab.panacare.entity.GoodsInfo;
 import com.panacealab.panacare.service.GoodsService;
+import com.panacealab.panacare.utils.StateCode;
+import com.panacealab.panacare.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -39,6 +41,7 @@ public class GoodsController {
     @RequestMapping(path = "addGoodsInfo",method = RequestMethod.POST)
     private String addGoodsInfo(@RequestParam GoodsInfo goodsInfo){
         //TODO 进行验证用户
+
 
 
 
