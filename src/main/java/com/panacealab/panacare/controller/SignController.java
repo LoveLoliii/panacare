@@ -20,9 +20,9 @@ public class SignController {
     }*/
 
     @RequestMapping(path = "getVerificationCode",method = RequestMethod.POST)
-    private String getVerificationCode(@RequestParam String mail){
+    private String getVerificationCode(@RequestBody Map map){
         // 生成验证码 发送邮件
-       String  rs = signService.getVerificationCode(mail);
+       String  rs = signService.getVerificationCode((String) map.get("mail"));
 
         return rs;
     }

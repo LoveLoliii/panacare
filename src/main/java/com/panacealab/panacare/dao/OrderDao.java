@@ -2,8 +2,9 @@ package com.panacealab.panacare.dao;
 
 import com.panacealab.panacare.entity.GoodsInfo;
 import com.panacealab.panacare.entity.OrderInfo;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-
+@Mapper
 public interface OrderDao {
     int insert(OrderInfo orderInfo);
 
