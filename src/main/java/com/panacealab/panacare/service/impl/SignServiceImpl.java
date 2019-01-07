@@ -198,6 +198,7 @@ public class SignServiceImpl implements SignService {
 
             //mybatis 不能重载
             try {
+                u.setUser_mail(mail);
                 u.setUser_uniq_id(StringUtil.getUUID());
                 int irs = signDao.insertUser(u);
                 logger.info("insertUser的返回结果是：" + irs);

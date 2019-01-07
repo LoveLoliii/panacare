@@ -4,10 +4,12 @@ package com.panacealab.panacare.entity;
 
 //import javax.persistence.*;
 
+import java.io.Serializable;
+
 /*@Entity
 @Table(name = "user_info")*/
-public class UserInfo {
-
+public class UserInfo implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Integer user_id;
     private String user_uniq_id;
     private String user_name;

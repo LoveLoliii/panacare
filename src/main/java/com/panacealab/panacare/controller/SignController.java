@@ -1,5 +1,6 @@
 package com.panacealab.panacare.controller;
 
+import com.google.gson.Gson;
 import com.panacealab.panacare.entity.UserInfo;
 import com.panacealab.panacare.service.SignService;
 import com.panacealab.panacare.utils.MailSendUtil;
@@ -28,13 +29,16 @@ public class SignController {
     }
 
     @RequestMapping(path="sign",method = RequestMethod.POST)
-    private String appSign(@RequestBody UserInfo userInfo, @RequestParam String mail, @RequestParam String code){
+    private String appSign(@RequestBody Map map){ //UserInfo userInfo, @RequestBody String mail, @RequestBody String code  catch error
+       Gson g = new Gson();
         // 封装用户信息
-        UserInfo u = userInfo;
+        UserInfo u = g.fromJson(String.valueOf(map.get("user_info")),UserInfo.class);
+        String mail = (String) map.get("mail");
+        String code = (String) map.get("code");
 
         String rs = signService.sign(u,mail,code);
 
-        return rs;
+        return  g.toJson(rs);
     }
 
 }
