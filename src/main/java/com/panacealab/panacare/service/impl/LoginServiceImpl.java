@@ -92,12 +92,10 @@ public class LoginServiceImpl implements LoginService {
                     e.printStackTrace();
                     state = "551";
                 }finally {
-                    resultMap.put("state",state);//state表示是否登陆成功。
-                    //return resultMap;
+                      resultMap.put("state",state);//state表示是否登陆成功。
+
                 }
-
-
-
+                return resultMap;
             }
             //密码不正确，返回失败信息
             resultMap.put("state","550");
