@@ -1,6 +1,8 @@
 package com.panacealab.panacare.utils;
 
 public class StateCode {
+    //一切正常
+    public static final String Data_Return_Success = "1303";
     //缺少用户信息
     public static String Lack_User_Uniq_ID = "673";
     //用户不一致
@@ -41,4 +43,5 @@ public class StateCode {
     public static String User_Not_Exist = "549";
     //微信支付
     public static String Pay_Way_WX = "1";
+    public static String Token_Validate_Self_Error = "558";
 }

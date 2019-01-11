@@ -28,6 +28,23 @@ public class TokenUtil {
     public TokenUtil() {
     }
 
+    /***
+     * 验证token是否唯一有效
+     * @param token token
+     * @return code 返回状态值 000
+     *
+     * */
+    public static String checkLoginState(String token) {
+        //token 自我验证
+        boolean t = tokenUtil.verifyToken(token);
+        String code = StateCode.Initial_Code;
+        if(t)
+            //进行redis验证
+           return tokenUtil.checkTokenWithRedis(token);
+        else
+            return StateCode.Token_Validate_Self_Error;
+    }
+
     @PostConstruct
     public void init() {
         tokenUtil = this;
@@ -82,7 +99,12 @@ public class TokenUtil {
 
 
 
-    //验证token的正确性 与Redis有效性
+    /***
+     * 验证token的正确性 与Redis有效性
+     * @param token token
+     * @return 通过验证，会返回000
+     *
+     * */
     public  String checkTokenWithRedis(String token){
         if (token == null || "".equals(token)) {
             return StateCode.Login_With_Not_Token;//状态码详情查看api文档

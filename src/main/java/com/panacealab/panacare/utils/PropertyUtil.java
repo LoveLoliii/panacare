@@ -19,6 +19,7 @@ public class PropertyUtil {
     }
 
 
-
-
+    public static String t(String s) {
+        return PropertyUtil.getInstance().getProperty(s);
+    }
 }
