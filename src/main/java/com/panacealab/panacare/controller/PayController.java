@@ -138,20 +138,23 @@ public class PayController {
         Gson g = new Gson();
         System.out.println(String.valueOf(map.get("orderInfo")));
         //处理订单信息
+        //客户端应该传来的信息  goods_uniq_id order_counts order_created_time order_pay_way  user_uniq_id order_state由数据库生成的信息  order_id 由服务端生成的信息 order_number
         OrderInfo orderInfo =  g.fromJson(String.valueOf(map.get("orderInfo")).trim(),OrderInfo.class);
-
+        //获取goods_id 用于拼接订单号
+        String goods_id = "";//如果goods_id 不存在 说明 订单信息有问题 终止本次 并返回客户端错误信息
+        orderInfo.setOrder_number(StringUtil.getOrderNumber(goods_id));
         try {
 
             //实例化客户端（参数：网关地址、商户appid、商户私钥、格式、编码、支付宝公钥、加密类型），为了取得预付订单信息
             String a = PropertyUtil.t("A.getWayPath");
-            String b = PropertyUtil.t("A.appIdO");
+            String b = PropertyUtil.t("A.appId");
             String c = PropertyUtil.t("A.appPrivateKey");
             String d = PropertyUtil.t("A.CHARSET");
             String e = PropertyUtil.t("A.aliPublicKey");
             String f = PropertyUtil.t("A.signType");
             System.out.println(a+b+c+d+e+f);
             AlipayClient alipayClient = new DefaultAlipayClient(a,b ,
-                    c,"json", d,
+                    c,"JSON", d,
                     e, f);
 
             //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
@@ -165,7 +168,7 @@ public class PayController {
             model.setBody("d");                       //对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。
             model.setSubject("牙刷");                 //商品名称
             model.setOutTradeNo("111");           //商户订单号(自动生成)
-             model.setTimeoutExpress("30m");     			  //交易超时时间
+            model.setTimeoutExpress("30m");     			  //交易超时时间
             model.setTotalAmount("0.01");         //支付金额
             model.setProductCode("QUICK_MSECURITY_PAY");        	  //销售产品码（固定值）
             ali_request.setBizModel(model);
