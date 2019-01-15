@@ -44,4 +44,10 @@ public class StateCode {
     //微信支付
     public static String Pay_Way_WX = "1";
     public static String Token_Validate_Self_Error = "558";
+    public static String OrderPrepare="OrderPrepare";
+
+    //交易状态
+    public static class TradeState {
+        public static String PendingPayment = "PendingPayment";
+    }
 }
