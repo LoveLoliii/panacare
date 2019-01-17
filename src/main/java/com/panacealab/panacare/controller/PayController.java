@@ -143,10 +143,14 @@ public class PayController {
         //获取goods_id 用于拼接订单号
         //  String goods_id = "";//如果goods_id 不存在 说明 订单信息有问题 终止本次 并返回客户端错误信息
         orderInfo.setOrder_number(StringUtil.getOrderNumber());//1秒内(10/270000的重复率)
+        //orderInfo.setGoods_uniq_id("test");
+        orderInfo.setOrder_state(StateCode.TradeState.PendingPayment);
+       //orderInfo.setOrder_counts(1);
+        //orderInfo.setOrder_created_time();
         //获取商品价格
         //获取商品信息
         GoodsInfo goodsInfo = null;
-        String price = goodsInfo.getGoods_onsale_buy_uprice();//
+        String price = "0.01";//goodsInfo.getGoods_onsale_buy_uprice();//
         String total = String.valueOf(orderInfo.getOrder_counts() * Float.parseFloat(price));
 
         //创建商户支付宝订单(因为需要记录每次支付宝支付的记录信息，单独存一个表跟商户订单表关联，以便以后查证)
@@ -233,7 +237,7 @@ public class PayController {
 
 
         Gson g = new Gson();
-        System.out.println(String.valueOf(map.get("orderInfo")));
+        System.out.println(map.get("orderInfo"));
         //处理订单信息
         //客户端应该传来的信息  goods_uniq_id order_counts order_created_time order_pay_way  user_uniq_id order_state由数据库生成的信息  order_id 由服务端生成的信息 order_number
         OrderInfo orderInfo = g.fromJson(String.valueOf(map.get("orderInfo")).trim(), OrderInfo.class);

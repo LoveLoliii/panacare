@@ -1,6 +1,8 @@
 package com.panacealab.panacare;
 
 import org.mybatis.spring.annotation.MapperScan;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -18,8 +20,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement //开启事务
 @EnableCaching //redis
 public class PanacareApplication {
-
+	private static Logger logger = LoggerFactory.getLogger("PanacareApplication");
 	public static void main(String[] args) {
+		logger.info("springBoot start");
 		SpringApplication.run(PanacareApplication.class, args);
+		logger.error("here");
 	}
 }

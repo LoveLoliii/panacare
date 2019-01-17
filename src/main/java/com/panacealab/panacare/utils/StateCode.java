@@ -45,6 +45,7 @@ public class StateCode {
     public static String Pay_Way_WX = "1";
     public static String Token_Validate_Self_Error = "558";
     public static String OrderPrepare="OrderPrepare";
+    public static String Token_Verify_Success="559";
 
     //交易状态
     public static class TradeState {
