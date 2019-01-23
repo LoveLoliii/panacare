@@ -9,7 +9,10 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 public class SHAToolTest {
@@ -24,6 +27,21 @@ public class SHAToolTest {
         logger.info("日志测试 log info");
         logger.error("日志测试 log error");
         logger.debug("日志测试 log debug");
+        List<String> list = new ArrayList();
+        for ( int i=0;i<1000000;i++ ) {
+            String order_number ;
+
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
+            String time = sdf.format(System.currentTimeMillis());            // /1000 从毫秒级改为秒级
+            long random = (long) (Math.random()*100000);
+            long order_num = Long.valueOf(time)*100000+random;
+           // logger.info("sdf:{}",order_num);
+            list.add(String.valueOf(order_num));
+        }
+        for (String o : list){
+           if(list.equals(o))
+               System.out.println(o);
+        }
 }
 
     private static void creatToken() {

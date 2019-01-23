@@ -18,4 +18,9 @@ public interface LoginDao {
             @Result(property = "user_mail", column = "user_mail")
     })
     List<UserInfo> query(String key, String value);
+
+
+
+    @Select("SELECT * FROM user_info where user_mail= #{account} and user_authority > 9")
+    List<UserInfo> queryWithPermission(String mail, String account);
 }

@@ -16,10 +16,10 @@ public class GoodsServiceImpl implements GoodsService {
     @Override
     public Map getAllGoodsInfo() {
         //
-        Map rsMap = new HashMap();
+        Map<String,Object> rsMap = new HashMap<>();
         List<GoodsInfo> goodsInfoList = goodsDao.queryAll();
         rsMap.put("state","455");
-        rsMap.put("goods_info",goodsInfoList);
+        rsMap.put("data",goodsInfoList);
         return rsMap;
     }
 

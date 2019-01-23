@@ -1,14 +1,12 @@
 package com.panacealab.panacare.controller;
 
+import com.google.gson.Gson;
 import com.panacealab.panacare.entity.GoodsInfo;
 import com.panacealab.panacare.service.GoodsService;
 import com.panacealab.panacare.utils.StateCode;
 import com.panacealab.panacare.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -38,9 +36,15 @@ public class GoodsController {
      *商品信息并非用户进行操作 web端后台管理
      *
      * */
+    @CrossOrigin
     @RequestMapping(path = "addGoodsInfo",method = RequestMethod.POST)
-    private String addGoodsInfo(@RequestParam GoodsInfo goodsInfo){
-        //TODO 进行验证用户
+    private String addGoodsInfo(@RequestBody Map map){
+
+
+        String token = (String) map.get("token");
+
+
+        GoodsInfo goodsInfo = (GoodsInfo) map.get("data");
 
 
 

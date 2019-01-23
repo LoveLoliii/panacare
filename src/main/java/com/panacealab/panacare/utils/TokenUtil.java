@@ -6,6 +6,7 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTDecodeException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import com.panacealab.panacare.entity.UserInfo;
 import com.panacealab.panacare.service.IRedisService;
 import jdk.nashorn.internal.parser.Token;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
@@ -36,13 +38,34 @@ public class TokenUtil {
      * */
     public static String checkLoginState(String token) {
         //token 自我验证
-        boolean t = tokenUtil.verifyToken(token);
+        boolean t = verifyToken(token);
         String code = StateCode.Initial_Code;
         if(t)
             //进行redis验证
            return tokenUtil.checkTokenWithRedis(token);
         else
             return StateCode.Token_Validate_Self_Error;
+    }
+
+    public static String createToken(UserInfo userInfo) throws IOException {
+        Properties p = new Properties();
+        p.load(TokenUtil.class.getResourceAsStream("/configure.properties"));
+        String secret = p.getProperty("panacare.jwt.secret");
+        String issuer = p.getProperty("panacare.jwt.issuer");
+        Algorithm algorithm = Algorithm.HMAC256(secret);
+        //获取当前时间戳
+        Long nowUnixTime = System.currentTimeMillis()/1000;
+        //计算10天后时间
+        long exp = nowUnixTime+60*60*24*10;
+        //创建一个token
+        return JWT.create()
+                .withIssuer(issuer)
+                .withExpiresAt(new Date(exp*1000))//过期时间
+                .withNotBefore(new Date()) //token 生效时间
+                .withSubject("login")
+                .withAudience(String.valueOf(userInfo.getUser_uniq_id()))
+                .withClaim("mail",userInfo.getUser_mail())
+                .sign(algorithm);
     }
 
     @PostConstruct

@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +35,19 @@ private final static Logger logger= LoggerFactory.getLogger("LoginController") ;
     logger.info("account:"+account);
        //验证
        return loginService.check(account,pwd);
+
+    }
+    @CrossOrigin
+    @RequestMapping(path = "/admin/login",method = RequestMethod.POST)
+    private Map adminLogin(@RequestBody Map map, HttpServletResponse response){
+
+        //System.out.println(mail+"->"+pwd);
+        String account = (String) map.get("mail");
+        String pwd = (String) map.get("pwd");
+
+        logger.info("account:"+account);
+        //验证
+        return loginService.adminCheck(account,pwd);
 
     }
 
