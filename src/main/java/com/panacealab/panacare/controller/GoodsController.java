@@ -11,7 +11,6 @@ import java.util.Map;
 public class GoodsController {
     @Autowired
     private GoodsService goodsService;
-
     /***
      *
      * @describe 取得所有商品信息
@@ -23,8 +22,6 @@ public class GoodsController {
         Map rs;
         rs = goodsService.getAllGoodsInfo();
         return rs;
-
-
     }
 
     /****
@@ -35,21 +32,8 @@ public class GoodsController {
     @CrossOrigin
     @RequestMapping(path = "addGoodsInfo",method = RequestMethod.POST)
     private String addGoodsInfo(@RequestBody Map map){
-
-
         String token = (String) map.get("token");
-
-
         GoodsInfo goodsInfo = (GoodsInfo) map.get("data");
-
-
-
-
         return goodsService.addGoodsInfo(goodsInfo);
-
     }
-
-
-
-
 }
