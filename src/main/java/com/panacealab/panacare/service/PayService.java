@@ -13,4 +13,10 @@ public interface PayService {
     GoodsInfo queryGoodsInfo(String goods_uniq_id);
 
     void saveSubscribeInfo(SubscribeInfo subscribeInfo);
+
+
+    OrderInfo queryOrderInfo(String order_number);
+
+    void updateOrder(String orderNumber);
+
 }

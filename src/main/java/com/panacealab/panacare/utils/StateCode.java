@@ -52,7 +52,13 @@ public class StateCode {
     public static final String PWD_Error = "550";
 
     //交易状态
-    public static class TradeState {
-        public static final String PendingPayment = "PendingPayment";
+    public enum  TradeState {
+        PENDING_PAYMENT,//待支付
+        CANCELED,//取消
+        PURCHASED,//完成支付
+        PENDING_SHIP,//待发货
+        SHIPPED,//已发货
+        COMPLETE,//订单完成
+        CLOSED,//订单关闭
     }
 }

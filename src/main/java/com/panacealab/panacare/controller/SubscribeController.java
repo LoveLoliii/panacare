@@ -39,7 +39,7 @@ public class SubscribeController {
            map.put("state",code);
            return map;
        }
-       //到这里的意思就是map值重新设定噜。
+       //到这里的意思就是map值重新设定。
        map = subscribeService.getSubscribeInfoByUid(user_uniq_id);
        return map;
    }

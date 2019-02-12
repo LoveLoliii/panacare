@@ -47,10 +47,7 @@ public class PanacareApplication {
 			corsConfiguration.addAllowedHeader("*");
 			// 3 设置访问源请求方法
 			corsConfiguration.addAllowedMethod("*");
-
 			corsConfiguration.setAllowCredentials(true);
-
-
 			return corsConfiguration;
 		}
 

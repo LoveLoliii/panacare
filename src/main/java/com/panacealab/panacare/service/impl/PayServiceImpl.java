@@ -36,4 +36,21 @@ public class PayServiceImpl implements PayService {
     public void saveSubscribeInfo(SubscribeInfo subscribeInfo) {
         payDao.insertSubscribeInfo(subscribeInfo);
     }
+
+    @Override
+    public OrderInfo queryOrderInfo(String order_number) {
+
+        return payDao.queryOrderInfo(order_number);
+    }
+
+    @Override
+    public void updateOrder(String orderNumber) {
+        //修改订单状态 order_info alipayment_order
+        payDao.updateOrderInfo(orderNumber);
+        payDao.updateAlipaymentOrder(orderNumber);
+
+
+    }
+
+
 }

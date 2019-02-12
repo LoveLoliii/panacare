@@ -137,7 +137,7 @@ public class TokenUtil {
             //验证token唯一性
             //获取用户uniq_id
             String user_uniq_id = TokenUtil.getTokenValues(token);
-            //查询redis使用存在该用户
+            //查询redis是否存在该用户
             if (!tokenUtil.iRedisService.isKeyExists(user_uniq_id)) {
                 //不存在用户token
                 return StateCode.Token_Not_In_Redis;

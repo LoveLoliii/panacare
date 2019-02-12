@@ -15,4 +15,10 @@ public interface PayDao {
     GoodsInfo queryGoodsInfo(String goods_uniq_id);
 
     void insertSubscribeInfo(SubscribeInfo subscribeInfo);
+
+    OrderInfo queryOrderInfo(String order_number);
+
+    void updateOrderInfo(String order_number);
+
+    void updateAlipaymentOrder(String order_number);
 }

@@ -16,9 +16,30 @@
     <select id="queryGoodsInfo" resultType="com.panacealab.panacare.entity.GoodsInfo">
         select * from goods_info where goods_state = 1 and goods_uniq_id = #{goods_uniq_id}
     </select>
+
+    <select id="queryOrderInfo" resultType="com.panacealab.panacare.entity.OrderInfo">
+        select * from order_info where order_number = #{order_number}
+    </select>
     <insert id="insertSubscribeInfo" parameterType="com.panacealab.panacare.entity.SubscribeInfo">
         insert into subscribe_info
         (goods_uniq_id,user_uniq_id,order_state)
         values (#{goods_uniq_id},#{user_uniq_id},#{order_counts},#{order_state})
     </insert>
+    
+    
+    <update id="updateOrderInfo" parameterType="com.panacealab.panacare.entity.OrderInfo">
+        update order_info
+        <set>
+            <if test="order_number !=null">order_state = "PURCHASED"</if>
+        </set>
+        where order_number=#{order_number}
+    </update>
+
+    <update id="updateAlipaymentOrder" parameterType="com.panacealab.panacare.entity.AlipaymentOrder">
+        update alipayment_order
+        <set>
+            <if test="order_number != null">aorder_trade_state = "TRADE_SUCCESS"</if>
+        </set>
+        where order_number=#{order_number}
+    </update>
 </mapper>

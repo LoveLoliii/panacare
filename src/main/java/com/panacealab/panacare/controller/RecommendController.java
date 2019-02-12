@@ -6,10 +6,7 @@ import com.panacealab.panacare.service.RecommendService;
 import com.panacealab.panacare.utils.StateCode;
 import com.panacealab.panacare.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -48,7 +45,6 @@ public class RecommendController {
             if (!token.equals(iRedisService.get(user_uniq_id))) {
                 //token 不相同 验证不通过
                 return StateCode.Token_Diff_With_Redis;
-
             }
         }
         return StateCode.Initial_Code;
@@ -56,20 +52,48 @@ public class RecommendController {
 
     //获取特征码
     @RequestMapping(path = "getUserReferee",method = RequestMethod.POST)
-    private Map getUserReferee(@RequestParam String token){
-        Map map = new HashMap();
-        map.put("state", "000");
-        map.put("data", new ArrayList<>());
-        String code = verifyToken(token);
-        if(!StateCode.Initial_Code.equals(code)){
-            map.put("state",code);
-            return map;
+    private Map getUserReferee(@RequestParam Map map){
+        Map resultMap = new HashMap();
+        resultMap.put("state", StateCode.Initial_Code);
+        //验证token
+        String token = (String) map.get("token");
+        String rs = TokenUtil.checkLoginState(token);
+        if (!StateCode.Initial_Code.equals(rs)) {
+            resultMap.put("state", rs);
+            return resultMap;
         }
         String user_uniq_id = TokenUtil.getTokenValues(token);
         map = recommendService.getUserReferee(user_uniq_id);
-
-        return map;
+        resultMap.put("data",map.get("data"));
+        resultMap.put("state",map.get("state"));
+        return resultMap;
     }
+
+    /***
+     * 生成特征码 get 能够生成 这里就不添加新的方法了
+     *token user_uniq_id
+     * @deprecated 请使用getUserReferee
+     *
+     * */
+    @RequestMapping(path = "createReferee",method = RequestMethod.POST)
+    private Map createReferee(@RequestBody Map map){
+        Map resultMap = new HashMap();
+        resultMap.put("state", StateCode.Initial_Code);
+        //验证token
+        String token = (String) map.get("token");
+        String rs = TokenUtil.checkLoginState(token);
+        if (!StateCode.Initial_Code.equals(rs)) {
+            resultMap.put("state", rs);
+            return resultMap;
+        }
+        //
+
+
+        return null;
+    }
+
+
+
     /***
      * 在新用户注册后 提交推荐人特征码
      *
