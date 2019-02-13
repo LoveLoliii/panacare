@@ -126,7 +126,7 @@ public class RecommendController {
     }
 
     /***
-     * @describe 用来获取任务奖励信息
+     *  用来获取任务奖励信息
      *
      * */
     @RequestMapping(path = "getRecommendRewardInfo", method = RequestMethod.POST)
@@ -138,26 +138,48 @@ public class RecommendController {
         return map;
     }
 
+
+    //获取邀请人数
+    @RequestMapping(path = "getRecommendRewardCount", method = RequestMethod.POST)
+    private Map getRecommendRewardCount(@RequestBody Map map) {
+        Map resultMap = new HashMap();
+        resultMap.put("state", StateCode.Initial_Code);
+        //验证token
+        String token = (String) map.get("token");
+        String rs = TokenUtil.checkLoginState(token);
+        if (!StateCode.Initial_Code.equals(rs)) {
+            resultMap.put("state", rs);
+            return resultMap;
+        }
+        map = recommendService.getRecommendRewardCount(TokenUtil.getTokenValues(token));
+        resultMap.put("state",map.get("state"));
+        resultMap.put("data",map.get("data"));
+        return resultMap;
+
+    }
     /***
-     * @decribe 获取奖励领取&发放记录
+     *  获取奖励领取&发放记录
      * */
     @RequestMapping(path = "getRecommendRewardRecord", method = RequestMethod.POST)
-    private Map getRecommendRewardRecord(@RequestParam String token) {
-        Map map = new HashMap();
-        map.put("state", "000");
-        map.put("data", new ArrayList<>());
-        String code = verifyToken(token);
-        if (!StateCode.Initial_Code.equals(code)) { //验证失败直接返回
-            map.put("state", code);
-            return map;
+    private Map getRecommendRewardRecord(@RequestBody Map map) {
+        Map resultMap = new HashMap();
+        resultMap.put("state", StateCode.Initial_Code);
+        //验证token
+        String token = (String) map.get("token");
+        String rs = TokenUtil.checkLoginState(token);
+        if (!StateCode.Initial_Code.equals(rs)) {
+            resultMap.put("state", rs);
+            return resultMap;
         }
         map = recommendService.getRecommendRewardRecord();
-        return map;
+        resultMap.put("state",map.get("state"));
+        resultMap.put("data",map.get("data"));
+        return resultMap;
 
     }
 
     /***
-     * @decribe 添加奖励领取记录
+     *   添加奖励领取记录
      * */
     @RequestMapping(path = "addRecommendRewardRecord", method = RequestMethod.POST)
     private String addRecommendRewardRecord(@RequestParam String token,@RequestParam RecommendRewardRecord recommendRewardRecord) {

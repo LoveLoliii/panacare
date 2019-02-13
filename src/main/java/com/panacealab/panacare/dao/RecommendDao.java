@@ -31,4 +31,8 @@ public interface RecommendDao {
     int insertRecommendRewardRecord(RecommendRewardRecord recommendRewardRecord);
 
     UserInfo queryByUserReferee(String user_uniq_id);
+
+    @Select("SELECT count(*) FROM recommend_info WHERE user_uniq_id = #{user_uniq_id}")
+    int queryRecommendRewardCount(String user_uniq_id);
+
 }

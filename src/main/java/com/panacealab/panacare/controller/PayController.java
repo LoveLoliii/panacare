@@ -16,10 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -35,17 +33,16 @@ public class PayController {
     Logger logger = LoggerFactory.getLogger(PayController.class);
     @Autowired
     private PayService payService;
-    private ExecutorService executorService = Executors.newFixedThreadPool(20);
+    private ExecutorService executorService = PUtils.getExecutorServiceInstance();
 
     @RequestMapping("getWay")
     private String getAliPayAsynNofity(HttpServletRequest request) {
         logger.debug("接收到支付宝的异步通知");
-
         Map<String, String> params = convertRequestParamsToMap(request); // 将异步通知中收到的待验证所有参数都存放到map中
         String paramsJson = JSON.toJSONString(params);
         logger.info("支付宝回调，{}", paramsJson);
-        HashMap paramsMap = JSON.parseObject(paramsJson,HashMap.class);
-        String orderNumber = (String) paramsMap.get("out_trade_no") ;
+        HashMap paramsMap = JSON.parseObject(paramsJson, HashMap.class);
+        String orderNumber = (String) paramsMap.get("out_trade_no");
         try {
             AlipayConfig alipayConfig = new AlipayConfig();// 支付宝配置
             // 调用SDK验证签名
@@ -65,9 +62,9 @@ public class PayController {
                         // 处理支付成功逻辑
                         try {
 
-                                logger.debug("支付成功，即将修改订单信息，订单号为:",orderNumber);
-                                // 处理业务逻辑
-                                 payService.updateOrder(orderNumber);
+                            logger.debug("支付成功，即将修改订单信息，订单号为:", orderNumber);
+                            // 处理业务逻辑
+                            payService.updateOrder(orderNumber);
 
 
                         } catch (Exception e) {
@@ -213,7 +210,7 @@ public class PayController {
             return resultMap;
         }
 
-        Gson g = new Gson();
+        Gson g = PUtils.getGsonInstance();
         System.out.println(map.get("orderInfo"));
         //处理订单信息
 
@@ -228,11 +225,11 @@ public class PayController {
         //获取商品价格
         //获取商品信息
         GoodsInfo goodsInfo = payService.queryGoodsInfo(orderInfo.getGoods_uniq_id());
-        String price =goodsInfo.getGoods_onsale_buy_uprice();//"0.01";//goodsInfo.getGoods_onsale_buy_uprice();//
+        String price = goodsInfo.getGoods_onsale_buy_uprice();//"0.01";//goodsInfo.getGoods_onsale_buy_uprice();//
         BigDecimal bPrice = new BigDecimal(price);
         BigDecimal bCount = new BigDecimal(orderInfo.getOrder_counts());
         BigDecimal bTotal = bPrice.multiply(bCount);
-        String total  = bTotal.setScale(2,RoundingMode.HALF_UP).toString();
+        String total = bTotal.setScale(2, RoundingMode.HALF_UP).toString();
         //是否会影响精度
 
         //创建商户支付宝订单(因为需要记录每次支付宝支付的记录信息，单独存一个表跟商户订单表关联，以便以后查证)
@@ -247,7 +244,7 @@ public class PayController {
         //保存支付宝支付订单信息
         payService.saveAlipaymentOrder(alipaymentOrder);//保存失败怎么办 @Transactional 回滚
         //保存订单信息
-        logger.debug("保存订单信息，订单号是："+orderInfo.getOrder_number());
+        logger.debug("保存订单信息，订单号是：" + orderInfo.getOrder_number());
         payService.saveOrder(orderInfo);
         try {
             //实例化客户端（参数：网关地址、商户appid、商户私钥、格式、编码、支付宝公钥、加密类型），为了取得预付订单信息
@@ -307,45 +304,43 @@ public class PayController {
             return resultMap;
         }
 
-        logger.info("==================支付宝下单,商户订单号为：" + "");
-
-
-        Gson g = new Gson();
-        System.out.println(map.get("orderInfo"));
-        //处理订单信息
-        //客户端应该传来的信息  goods_uniq_id order_counts order_created_time order_pay_way  user_uniq_id order_state由数据库生成的信息  order_id 由服务端生成的信息 order_number
-        OrderInfo orderInfo = g.fromJson(String.valueOf(map.get("orderInfo")).trim(), OrderInfo.class);
-
-        //  String goods_id = "";//如果goods_id 不存在 说明 订单信息有问题 终止本次 并返回客户端错误信息
-        orderInfo.setOrder_number(StringUtil.getOrderNumber());//1秒内(10/270000的重复率)
-        //获取商品价格
-        //获取商品信息
-        GoodsInfo goodsInfo = payService.queryGoodsInfo(orderInfo.getGoods_uniq_id());
-        String price = goodsInfo.getGoods_onsale_buy_uprice();//
-        String total = String.valueOf(orderInfo.getOrder_counts() * Float.parseFloat(price));
-
-        //创建商户支付宝订单(因为需要记录每次支付宝支付的记录信息，单独存一个表跟商户订单表关联，以便以后查证)
-        AlipaymentOrder alipaymentOrder = new AlipaymentOrder();
-        alipaymentOrder.setOrder_number(orderInfo.getOrder_number());                   //商户订单号
-        alipaymentOrder.setAorder_trade_state(StateCode.TradeState.PENDING_PAYMENT.name());     //交易状态
-        alipaymentOrder.setAorder_total_amount("0.01");                                 //订单金额
-        alipaymentOrder.setAorder_receipt_amount("0.01");                               //实收金额
-        alipaymentOrder.setAorder_invoice_amount("0.01");                               //开票金额
-        alipaymentOrder.setAorder_buyer_pay_amount("0.01");                             //付款金额
-        alipaymentOrder.setAorder_refund_fee("0.01");                                   //总退款金额
-        //保存支付宝支付订单信息
-        payService.saveAlipaymentOrder(alipaymentOrder);//保存失败怎么办 @Transactional 回滚
-        //保存订单信息
-        payService.saveOrder(orderInfo);
-        //保存到订阅表
-        SubscribeInfo subscribeInfo = new SubscribeInfo();
-        subscribeInfo.setGoods_uniq_id(orderInfo.getGoods_uniq_id());
-        subscribeInfo.setSubscribe_state(StateCode.OrderPrepare);
-        subscribeInfo.setUser_uniq_id(orderInfo.getUser_uniq_id());
-        payService.saveSubscribeInfo(subscribeInfo);
-
 
         try {
+            Gson g = new Gson();
+            System.out.println(map.get("orderInfo"));
+            //处理订单信息
+            //客户端应该传来的信息  goods_uniq_id order_counts order_created_time order_pay_way  user_uniq_id order_state   由数据库生成的信息->order_id  由服务端生成的信息->order_number
+            OrderInfo orderInfo = g.fromJson(String.valueOf(map.get("orderInfo")).trim(), OrderInfo.class);
+            orderInfo.setOrder_number(StringUtil.getOrderNumber());//1秒内(10/270000的重复率)
+            logger.info("支付宝下单,商户订单号为：" + orderInfo.getOrder_number());
+            orderInfo.setOrder_state(StateCode.TradeState.PENDING_PAYMENT.name());
+            //获取商品价格
+            //获取商品信息
+            GoodsInfo goodsInfo = payService.queryGoodsInfo(orderInfo.getGoods_uniq_id());
+            String price = goodsInfo.getGoods_onsale_buy_uprice();//"0.01";//goodsInfo.getGoods_onsale_buy_uprice();//
+            BigDecimal bPrice = new BigDecimal(price);
+            BigDecimal bCount = new BigDecimal(orderInfo.getOrder_counts());
+            BigDecimal bTotal = bPrice.multiply(bCount);
+            String total = bTotal.setScale(2, RoundingMode.HALF_UP).toString();//是否会影响精度
+            //创建商户支付宝订单(因为需要记录每次支付宝支付的记录信息，单独存一个表跟商户订单表关联，以便以后查证)
+            AlipaymentOrder alipaymentOrder = new AlipaymentOrder();
+            alipaymentOrder.setOrder_number(orderInfo.getOrder_number());//商户订单号
+            alipaymentOrder.setAorder_trade_state(StateCode.TradeState.PENDING_PAYMENT.name());//交易状态
+            alipaymentOrder.setAorder_total_amount(total);//订单金额
+            alipaymentOrder.setAorder_receipt_amount(total);//实收金额
+            alipaymentOrder.setAorder_invoice_amount(total);//开票金额
+            alipaymentOrder.setAorder_buyer_pay_amount(total);//付款金额
+            alipaymentOrder.setAorder_refund_fee(total);//总退款金额
+            //保存支付宝支付订单信息
+            payService.saveAlipaymentOrder(alipaymentOrder);//保存失败怎么办 @Transactional 回滚
+            //保存订单信息
+            payService.saveOrder(orderInfo);
+            //保存到订阅表
+            SubscribeInfo subscribeInfo = new SubscribeInfo();
+            subscribeInfo.setGoods_uniq_id(orderInfo.getGoods_uniq_id());
+            subscribeInfo.setSubscribe_state(StateCode.OrderPrepare);
+            subscribeInfo.setUser_uniq_id(orderInfo.getUser_uniq_id());
+            payService.saveSubscribeInfo(subscribeInfo);
 
             //实例化客户端（参数：网关地址、商户appid、商户私钥、格式、编码、支付宝公钥、加密类型），为了取得预付订单信息
             String a = PropertyUtil.t("A.getWayPath");
@@ -354,55 +349,48 @@ public class PayController {
             String d = PropertyUtil.t("A.CHARSET");
             String e = PropertyUtil.t("A.aliPublicKey");
             String f = PropertyUtil.t("A.signType");
-            System.out.println(a + b + c + d + e + f);
-            AlipayClient alipayClient = new DefaultAlipayClient(a, b,
-                    c, "JSON", d,
-                    e, f);
-
+            logger.debug("支付参数:",a + "," + b + "," + c + "," + d + "," + e + "," + f);
+            AlipayClient alipayClient = new DefaultAlipayClient(a, b, c, "JSON", d, e, f);
             //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
             AlipayTradeAppPayRequest ali_request = new AlipayTradeAppPayRequest();
-
             //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式
             AlipayTradeAppPayModel model = new AlipayTradeAppPayModel();
-
             //业务参数传入,可以传很多，参考API
             //model.setPassbackParams(URLEncoder.encode(request.getBody().toString())); //公用参数（附加数据）
-            model.setBody("d");                                                         //对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。
-            model.setSubject("牙刷");   //goodsInfo.getGoods_name()                     //商品名称
+            model.setBody(goodsInfo.getGoods_description());                            //对一笔交易的具体描述信息。如果是多种商品，请将商品描述字符串累加传给body。
+            model.setSubject(goodsInfo.getGoods_name());                                //商品名称
             model.setOutTradeNo(orderInfo.getOrder_number());                           //商户订单号(自动生成)
             model.setTimeoutExpress("30m");                                             //交易超时时间
-            model.setTotalAmount("0.01"); //price                                       //支付金额
+            model.setTotalAmount("0.01");                                               //支付金额
             model.setProductCode("QUICK_MSECURITY_PAY");                                //销售产品码（固定值）
             ali_request.setBizModel(model);
-            logger.info("====================异步通知的地址为：" + "");
+            logger.info("异步通知的地址为：" + PropertyUtil.t("A.notifyUrl"));
             ali_request.setNotifyUrl(PropertyUtil.t("A.notifyUrl"));                //异步回调地址（后台）
-            //ali_request.setReturnUrl(AlipayConfig.return_url);	                    //同步回调地址（APP）
-
+            //ali_request.setReturnUrl(AlipayConfig.return_url);                        //同步回调地址（APP）
             // 这里和普通的接口调用不同，使用的是sdkExecute
             AlipayTradeAppPayResponse alipayTradeAppPayResponse = alipayClient.sdkExecute(ali_request); //返回支付宝订单信息(预处理)
             String orderString = alipayTradeAppPayResponse.getBody();                   //就是orderString 可以直接给APP请求，无需再做处理。
             //this.createAlipayMentOrder(alipaymentOrder);                              //创建新的商户支付宝订单
-
-
             resultMap.put("data", orderString);
             resultMap.put("state", StateCode.Data_Return_Success);
             return resultMap;// URLEncoder.encode(aliOrderInfo, "UTF-8");
         } catch (Exception e) {
             e.printStackTrace();
+            logger.error("保存信息或者预处理发生错误，stackTrace：", e);
+            return resultMap;
         }
-        return resultMap;
-
+        //return resultMap;
     }
 
     @Transactional
-    @RequestMapping(path = "queryPayResult",method = RequestMethod.POST)
-    private Map queryPayResult(@RequestBody Map map){
+    @RequestMapping(path = "queryPayResult", method = RequestMethod.POST)
+    private Map queryPayResult(@RequestBody Map map) {
         Map resultMap = new HashMap();
-        String order_number = (String)map.get("order_number");
-        logger.debug("order_number:"+order_number);
+        String order_number = (String) map.get("order_number");
+        logger.debug("order_number:" + order_number);
         OrderInfo orderInfo = payService.queryOrderInfo(order_number);
-        resultMap.put("state",StateCode.Data_Return_Success);
-        resultMap.put("data",orderInfo);
+        resultMap.put("state", StateCode.Data_Return_Success);
+        resultMap.put("data", orderInfo);
         return resultMap;
     }
 }

@@ -96,5 +96,14 @@ public class RecommendServiceImpl implements RecommendService {
         return map;
     }
 
+    @Override
+    public Map getRecommendRewardCount(String user_uniq_id) {
+        Map map = new HashMap();
+        int count = recommendDao.queryRecommendRewardCount(user_uniq_id);
+        map.put("data",count);
+        map.put("state","1303");
+        return map;
+    }
+
 
 }

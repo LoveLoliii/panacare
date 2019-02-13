@@ -20,4 +20,7 @@ public interface RecommendService {
     String updateRecommendRewardRecord(RecommendRewardRecord recommendRewardRecord);
 
     Map getUserReferee(String user_uniq_id);
+
+    Map getRecommendRewardCount(String user_uniq_id);
+
 }
