@@ -14,6 +14,9 @@ public class PUtils {
 
 
     private enum GsonSingleInstance{
+        /**
+         * 获取单例
+         * */
         INSTANCE;
         private Gson g ;
         GsonSingleInstance() {

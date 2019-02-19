@@ -29,7 +29,7 @@ public class SignController {
     }
 
     @RequestMapping(path="sign",method = RequestMethod.POST)
-    private String appSign(@RequestBody Map map){ //UserInfo userInfo, @RequestBody String mail, @RequestBody String code  catch error
+    private String appSign(@RequestBody Map map){
        Gson g = new Gson();
         // 封装用户信息
         UserInfo u = g.fromJson(String.valueOf(map.get("user_info")),UserInfo.class);

@@ -9,9 +9,16 @@ import java.util.List;
 @Mapper
 public interface GoodsDao {
 
-
+    /**
+     * 查询所有商品信息
+     * @return List<GoodsInfo> 商品信息
+     * */
     List<GoodsInfo> queryAll();
-    //error
+    /**
+     * 插入商品信息
+     * @param goodsInfo 商品信息
+     * @return int 插入的条数
+     * */
     @Insert("INSERT INTO goods_info")
     int insert(GoodsInfo goodsInfo);
 }

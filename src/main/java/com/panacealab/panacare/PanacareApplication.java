@@ -27,9 +27,9 @@ import org.springframework.web.filter.CorsFilter;
 public class PanacareApplication {
 	private static Logger logger = LoggerFactory.getLogger("PanacareApplication");
 	public static void main(String[] args) {
-		logger.info("springBoot start");
+		logger.info("Service Starting");
 		SpringApplication.run(PanacareApplication.class, args);
-		logger.error("here");
+		logger.error("Service Start Over ");
 	}
 
 

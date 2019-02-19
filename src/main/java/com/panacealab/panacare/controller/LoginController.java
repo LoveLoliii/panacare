@@ -28,7 +28,6 @@ private final static Logger logger= LoggerFactory.getLogger("LoginController") ;
      * */
 @RequestMapping(path = "login",method = RequestMethod.POST)
     private Map appLogin(@RequestBody Map map){
-        //System.out.println(mail+"->"+pwd);
     String account = (String) map.get("mail");
     String pwd = (String) map.get("pwd");
 
@@ -40,8 +39,6 @@ private final static Logger logger= LoggerFactory.getLogger("LoginController") ;
     @CrossOrigin
     @RequestMapping(path = "/admin/login",method = RequestMethod.POST)
     private Map adminLogin(@RequestBody Map map, HttpServletResponse response){
-
-        //System.out.println(mail+"->"+pwd);
         String account = (String) map.get("mail");
         String pwd = (String) map.get("pwd");
 
@@ -59,13 +56,12 @@ private final static Logger logger= LoggerFactory.getLogger("LoginController") ;
      * */
     @RequestMapping(path = "loginWithToken",method = RequestMethod.POST)
     private Map loginWithToken(@RequestBody Map map){
-        Map resultMap = new HashMap();
+        Map resultMap = new HashMap(16);
         String token = (String) map.get("token");
         logger.info("token:"+token);
         String rs = TokenUtil.checkLoginState(token);
         if (!StateCode.Initial_Code.equals(rs)) {
             resultMap.put("state", rs);
-            //resultMap.put("data","");
             return resultMap;
         }
 

@@ -33,20 +33,22 @@ public class OrderController {
      */
     @RequestMapping("createOrder")
     private Map createOrder(@RequestParam(name = "token",required = false) String token,@RequestParam String goods_uniq_id,@RequestParam String counts){
-        Map map = new HashMap();
+        Map map = new HashMap(16);
         //验证token
         String  code = TokenUtil.getTokenValues(token);
         map.put("state",code);
         if (!StateCode.Initial_Code.equals(code))
-            return map;
+        {return map;}
         //检查库存由前端来做
         //生成订单
         //生成订单号 = 时间 + 随机数
         String order_number ;
-        String user_uniq_id ;//从token中取？
+        //从token中取？
+        String user_uniq_id ;
         user_uniq_id = TokenUtil.getTokenValues(token);
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-        String time = sdf.format(System.currentTimeMillis());// /1000 从毫秒级改为秒级
+        // /1000 从毫秒级改为秒级
+        String time = sdf.format(System.currentTimeMillis());
         long random = (long) (Math.random()*100000);
         order_number = String.valueOf(Long.valueOf(time)*100000+random);
         //订单状态 默认值
@@ -61,17 +63,17 @@ public class OrderController {
     /***
      * 用户选择微信支付时，调用此api
      *  请求生成支付订单（） 调用统一下单api
-     * @param token
-     * @param order_number
+     * @param token token
+     * @param order_number 订单编号
      *
      * */
     @RequestMapping("createWXPayOrder")
     private Map createWXPayOrder(@RequestParam(name = "token",required = false) String token,@RequestParam String order_number){
-        Map map = new HashMap();
+        Map map = new HashMap(16);
         String code = new TokenUtil().checkTokenWithRedis(token);
         map.put("state",code);
         if (!StateCode.Initial_Code.equals(code))
-            return map;
+        { return map;}
         String user_uniq_id = TokenUtil.getTokenValues(token);
         map = orderService.createWXPayOrder(user_uniq_id,order_number);
         return map;
@@ -86,7 +88,8 @@ public class OrderController {
     private void wxPayNotify(@RequestParam HttpServletRequest request, @RequestParam HttpServletResponse response){
         try {
             String result = PayCommonUtil.reciverWx(request);
-            Map<String,String> m = new HashMap<>();//解析xml为map
+            //解析xml为map
+            Map<String,String> m = new HashMap<>(16);
             if (m != null && !"".equals(m))
             {
                 m = XMLUtil.doWXXMLParse(result);
@@ -112,23 +115,24 @@ public class OrderController {
                 if ("SUCCESS".equals((String) packageParams.get("return_code")))
                 {
                     // 如果返回成功
-                   String mch_id = (String) packageParams.get("mch_id"); // 商户号
-                   String out_trade_no = (String) packageParams.get("out_trade_no"); // 商户订单号
+                    // 商户号
+                   String mch_id = (String) packageParams.get("mch_id");
+                    // 商户订单号
+                   String out_trade_no = (String) packageParams.get("out_trade_no");
                    String total_fee = (String) packageParams.get("total_fee");
                     // String transaction_id = (String) packageParams.get("transaction_id"); // 微信支付订单号
                     OrderInfo orderInfo = orderService.queryByUID(out_trade_no);
                     GoodsInfo goodsInfo = orderService.queryGoodsInfoByUID(orderInfo.getGoods_uniq_id());
                     // 验证商户ID 和 价格 以防止篡改金额
-                    if (PropertyUtil.getInstance().getProperty("WxPay.mchid").equals(mch_id)/* && orderInfo != null*/
+                    if (PropertyUtil.getInstance().getProperty("WxPay.mchid").equals(mch_id)
                     // 实际项目中将此注释删掉，以保证支付金额相等
                     && total_fee.trim().toString().equals(String.valueOf(100*orderInfo.getOrder_counts()*Integer.parseInt(goodsInfo.getGoods_onsale_buy_uprice())))
                     ){
-                        /**
-                         *
-                         */
-                        //insertWxNotice(packageParams);
-                        orderInfo.setOrder_pay_way(StateCode.Pay_Way_WX); // 变更支付方式为wx
-                        orderInfo.setOrder_state(StateCode.Order_Purchased); // 订单状态为已付款
+
+                        // 变更支付方式为wx
+                        orderInfo.setOrder_pay_way(StateCode.Pay_Way_WX);
+                        // 订单状态为已付款
+                        orderInfo.setOrder_state(StateCode.Order_Purchased);
                         orderInfo.setOrder_finished_time(String.valueOf(System.currentTimeMillis()));
                          // 变更数据库中该订单状态
                         orderService.changeOrderState(orderInfo);

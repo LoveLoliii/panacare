@@ -28,9 +28,9 @@ public class RepairController {
     private String submitRepairMsg(HttpServletRequest httpServletRequest, @RequestParam(value = "token", required = false) String token) {
         String  code = TokenUtil.getTokenValues(token);
         if (!StateCode.Initial_Code.equals(code))
-                return code;
+        {return code;}
         String user_uniq_id = TokenUtil.getTokenValues(token);
-        List<Map> fileNameList = new ArrayList<>();
+        List<Map> fileNameList;
         fileNameList = FileUtil.saveFile(httpServletRequest);
         String rs = repairService.submitRepairMsg(fileNameList, user_uniq_id);
         return rs;

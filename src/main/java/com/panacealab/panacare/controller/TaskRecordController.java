@@ -20,7 +20,8 @@ public class TaskRecordController {
     @RequestMapping(path = "addTaskRecord", method = RequestMethod.POST)
     private String addTaskRecord(@RequestParam(value = "token", required = false) String token, @RequestParam TaskRecord taskRecord) {
         if (token == null) {
-            return "554";//状态码详情查看api文档
+            //状态码详情查看api文档
+            return "554";
         } else if (!TokenUtil.verifyToken(token)) {
             return "555";
         } else {
@@ -50,7 +51,8 @@ public class TaskRecordController {
     @RequestMapping(path = "updateTaskRecord",method = RequestMethod.POST)
     private String updateTaskRecord(@RequestParam(value = "token", required = false) String token, @RequestParam TaskRecord taskRecord){
         if (token == null) {
-            return "554";//状态码详情查看api文档
+            //状态码详情查看api文档
+            return "554";
         } else if (!TokenUtil.verifyToken(token)) {
             return "555";
         } else {
@@ -66,10 +68,8 @@ public class TaskRecordController {
             if (!token.equals(iRedisService.get(user_uniq_id))) {
                 //token 不相同 验证不通过
                 return "557";
-
             }
         }
-
         String rs = taskRecordService.updateTaskRecord(taskRecord);
         return rs;
     }

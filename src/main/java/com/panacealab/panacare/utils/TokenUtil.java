@@ -19,13 +19,15 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
+/**
+ * @author loveloliii
+ *
+ * */
 @Component
 public class TokenUtil {
     private static Logger logger = Logger.getLogger("com.panacealab.panacare.utils.TokenUtil");
     @Autowired
     private IRedisService iRedisService;
-
-
     public static TokenUtil tokenUtil;
     public TokenUtil() {
     }
@@ -40,11 +42,13 @@ public class TokenUtil {
         //token 自我验证
         boolean t = verifyToken(token);
         String code = StateCode.Initial_Code;
-        if(t)
+        if(t){
             //进行redis验证
            return tokenUtil.checkTokenWithRedis(token);
-        else
+        }
+        else{
             return StateCode.Token_Validate_Self_Error;
+        }
     }
 
     public static String createToken(UserInfo userInfo) throws IOException {
@@ -60,8 +64,10 @@ public class TokenUtil {
         //创建一个token
         return JWT.create()
                 .withIssuer(issuer)
-                .withExpiresAt(new Date(exp*1000))//过期时间
-                .withNotBefore(new Date()) //token 生效时间
+                //过期时间
+                .withExpiresAt(new Date(exp*1000))
+                //token 生效时间
+                .withNotBefore(new Date())
                 .withSubject("login")
                 .withAudience(String.valueOf(userInfo.getUser_uniq_id()))
                 .withClaim("mail",userInfo.getUser_mail())
@@ -130,7 +136,8 @@ public class TokenUtil {
      * */
     public  String checkTokenWithRedis(String token){
         if (token == null || "".equals(token)) {
-            return StateCode.Login_With_Not_Token;//状态码详情查看api文档
+            //状态码详情查看api文档
+            return StateCode.Login_With_Not_Token;
         } else if (!TokenUtil.verifyToken(token)) {
             return StateCode.Token_Verify_Fail;
         } else {

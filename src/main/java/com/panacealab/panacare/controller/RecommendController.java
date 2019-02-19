@@ -5,6 +5,9 @@ import com.panacealab.panacare.service.IRedisService;
 import com.panacealab.panacare.service.RecommendService;
 import com.panacealab.panacare.utils.StateCode;
 import com.panacealab.panacare.utils.TokenUtil;
+import javafx.collections.ObservableMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,6 +23,7 @@ public class RecommendController {
     @Autowired
     private RecommendService recommendService;
 
+    private Logger logger = LoggerFactory.getLogger("RecommendController");
 
     /***
      * token验证方法
@@ -29,7 +33,8 @@ public class RecommendController {
     private String verifyToken(String token) {
         String user_uniq_id;
         if (token == null || "".equals(token)) {
-            return StateCode.Login_With_Not_Token;//状态码详情查看api文档
+            //状态码详情查看api文档
+            return StateCode.Login_With_Not_Token;
         } else if (!TokenUtil.verifyToken(token)) {
             return StateCode.Token_Verify_Fail;
         } else {
@@ -50,7 +55,9 @@ public class RecommendController {
         return StateCode.Initial_Code;
     }
 
-    //获取特征码
+    /**
+     * 获取特征码
+     */
     @RequestMapping(path = "getUserReferee",method = RequestMethod.POST)
     private Map getUserReferee(@RequestParam Map map){
         Map resultMap = new HashMap();
@@ -71,7 +78,7 @@ public class RecommendController {
 
     /***
      * 生成特征码 get 能够生成 这里就不添加新的方法了
-     *token user_uniq_id
+     * token user_uniq_id
      * @deprecated 请使用getUserReferee
      *
      * */
@@ -86,9 +93,6 @@ public class RecommendController {
             resultMap.put("state", rs);
             return resultMap;
         }
-        //
-
-
         return null;
     }
 
@@ -96,33 +100,23 @@ public class RecommendController {
 
     /***
      * 在新用户注册后 提交推荐人特征码
-     *
+     * updated date:2019/02/18
      * */
     @RequestMapping(path = "addRecommendInfo", method = RequestMethod.POST)
-    private String addRecommendInfo(@RequestParam String token, @RequestParam String user_referee) {
-        String user_uniq_id;
-        if (token == null) {
-            return "554";//状态码详情查看api文档
-        } else if (!TokenUtil.verifyToken(token)) {
-            return "555";
-        } else {
-            //验证token唯一性
-            //获取用户uniq_id
-            user_uniq_id = TokenUtil.getTokenValues(token);
-            //查询redis使用存在该用户
-            if (!iRedisService.isKeyExists(user_uniq_id)) {
-                //不存在用户token
-                return "556";
-            }
-            //存在token 进行对比
-            if (!token.equals(iRedisService.get(user_uniq_id))) {
-                //token 不相同 验证不通过
-                return "557";
-
-            }
+    private Map addRecommendInfo(@RequestBody Map map) {
+        Map<String, Object> resultMap = new HashMap<>();
+        resultMap.put("state", StateCode.Initial_Code);
+        //验证token
+        String token = (String) map.get("token");
+        String rs = TokenUtil.checkLoginState(token);
+        if (!StateCode.Initial_Code.equals(rs)) {
+            resultMap.put("state", rs);
+            return resultMap;
         }
-        String rs = recommendService.addRecommendInfo(user_uniq_id, user_referee);
-        return rs;
+        String user_referee = (String) map.get("user_referee");
+        String state = recommendService.addRecommendInfo(TokenUtil.getTokenValues(token), user_referee);
+        resultMap.put("state",state);
+        return resultMap;
     }
 
     /***
@@ -131,18 +125,21 @@ public class RecommendController {
      * */
     @RequestMapping(path = "getRecommendRewardInfo", method = RequestMethod.POST)
     private Map getRecommendRewardInfo() {
-        Map map = new HashMap();
-        map.put("state", "000");
-        map.put("data", new ArrayList<>());
-        map = recommendService.getRecommendRewardInfo();
-        return map;
+        Map<String,Object> resultMap = new HashMap<>(16);
+        resultMap.put("state", "000");
+        resultMap.put("data", new ArrayList<>());
+        resultMap = recommendService.getRecommendRewardInfo();
+        return resultMap;
     }
 
 
-    //获取邀请人数
+    /**
+     * 获取邀请人数
+     * */
     @RequestMapping(path = "getRecommendRewardCount", method = RequestMethod.POST)
     private Map getRecommendRewardCount(@RequestBody Map map) {
-        Map resultMap = new HashMap();
+        logger.info("\n进入getRecommendRewardCount方法");
+        Map<String,Object> resultMap = new HashMap<>(16);
         resultMap.put("state", StateCode.Initial_Code);
         //验证token
         String token = (String) map.get("token");
@@ -154,6 +151,7 @@ public class RecommendController {
         map = recommendService.getRecommendRewardCount(TokenUtil.getTokenValues(token));
         resultMap.put("state",map.get("state"));
         resultMap.put("data",map.get("data"));
+        logger.info("\n返回getRecommendRewardCount方法结果："+resultMap);
         return resultMap;
 
     }
@@ -162,7 +160,8 @@ public class RecommendController {
      * */
     @RequestMapping(path = "getRecommendRewardRecord", method = RequestMethod.POST)
     private Map getRecommendRewardRecord(@RequestBody Map map) {
-        Map resultMap = new HashMap();
+        logger.info("\n进入getRecommendRewardRecord方法");
+        Map<String,Object> resultMap = new HashMap<>(16);
         resultMap.put("state", StateCode.Initial_Code);
         //验证token
         String token = (String) map.get("token");
@@ -171,11 +170,10 @@ public class RecommendController {
             resultMap.put("state", rs);
             return resultMap;
         }
-        map = recommendService.getRecommendRewardRecord();
-        resultMap.put("state",map.get("state"));
-        resultMap.put("data",map.get("data"));
+        String user_uniq_id = TokenUtil.getTokenValues(token);
+        resultMap = recommendService.getRecommendRewardRecord(user_uniq_id);
+        logger.info("\n返回getRecommendRewardRecord方法结果："+resultMap);
         return resultMap;
-
     }
 
     /***
@@ -184,11 +182,11 @@ public class RecommendController {
     @RequestMapping(path = "addRecommendRewardRecord", method = RequestMethod.POST)
     private String addRecommendRewardRecord(@RequestParam String token,@RequestParam RecommendRewardRecord recommendRewardRecord) {
         String code = verifyToken(token);
-        if (!StateCode.Initial_Code.equals(code)){ //验证失败直接返回
+        //验证失败直接返回
+        if (!StateCode.Initial_Code.equals(code)){
             return code;
         }
-        String rs = recommendService.addRecommendRewardRecord(recommendRewardRecord);
-        return rs;
+        return recommendService.addRecommendRewardRecord(recommendRewardRecord);
     }
 
     /***
@@ -197,8 +195,7 @@ public class RecommendController {
      * */
     @RequestMapping(path = "updateRecommendRewardRecord", method = RequestMethod.POST)
     private String updateRecommendRewardRecord(@RequestParam RecommendRewardRecord recommendRewardRecord) {
-        String rs = recommendService.updateRecommendRewardRecord(recommendRewardRecord);
-        return rs;
+        return recommendService.updateRecommendRewardRecord(recommendRewardRecord);
     }
 
 

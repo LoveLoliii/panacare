@@ -23,8 +23,13 @@ public interface RecommendDao {
 
     @Select("SELECT * FROM recommend_reward")
     List<RecommendReward> queryRecommendReward();
-    @Select("SELECT * FROM recommend_reward_record")
-    List<RecommendRewardRecord> queryRecommendRewardRecord();
+    /**
+     * 通过uid查询recommend_reward_record
+     * @param user_uniq_id uid
+     * @return List
+     * */
+    @Select("SELECT * FROM recommend_reward_record WHERE user_uniq_id = #{user_uniq_id}")
+    List<RecommendRewardRecord> queryRecommendRewardRecord(String user_uniq_id);
 
     int updateRecommendRewardRecord(RecommendRewardRecord recommendRewardRecord);
 
@@ -34,5 +39,8 @@ public interface RecommendDao {
 
     @Select("SELECT count(*) FROM recommend_info WHERE user_uniq_id = #{user_uniq_id}")
     int queryRecommendRewardCount(String user_uniq_id);
-
+    @Select("SELECT COUNT(*) FROM recommend_reward WHERE recommend_reward_count = #{c}")
+    int queryRecommendRewardIdByCount(int c);
+    @Select("SELECT COUNT(*) FROM recommend_reward_record WHERE user_uniq_id =#{user_uniq_id} and recommend_reward_id = #{recommend_reward_id} ")
+    int queryRecommendRewardRecordByRI(String user_uniq_id, int recommend_reward_id);
 }

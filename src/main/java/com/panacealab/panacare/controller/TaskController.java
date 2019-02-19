@@ -25,7 +25,7 @@ public class TaskController {
     @RequestMapping(path = "getTaskInfo", method = RequestMethod.POST)
     private Map getTaskInfo(@RequestParam(value = "token", required = false) String token) {
         String state = "000";
-        Map map = new HashMap();
+        Map map = new HashMap(16);
         List rs = new ArrayList();
         if (null == token || "".equals(token)) {
             state = "554";
@@ -42,21 +42,18 @@ public class TaskController {
                 //不存在用户token
                 state = "556";
                 map.put("state",state);
-            }else if (!token.equals(iRedisService.get(user_uniq_id))){//存在token 进行对比
+             }
+            //存在token 进行对比
+            else if (!token.equals(iRedisService.get(user_uniq_id))){
                 //token 不相同 验证不通过
                 state = "557";
                 map.put("state",state);
             }else {
                 //验证token完毕 登陆成功 获取task任务信息 ...获取任务信息好像不需要token
-
                map = taskService.getTaskInfo();
             }
         }
-
-
-
         return map;
-
     }
 
 
@@ -78,8 +75,6 @@ public class TaskController {
         //TODO 验证token后
         String user_uniq_id = "test";
         String rs  = taskService.deleteTaskInfoOnLogic(user_uniq_id,task_info_id);
-
-
         return null;
     }
 

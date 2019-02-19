@@ -6,13 +6,17 @@ import com.panacealab.panacare.entity.RecommendReward;
 import com.panacealab.panacare.entity.RecommendRewardRecord;
 import com.panacealab.panacare.entity.UserInfo;
 import com.panacealab.panacare.service.RecommendService;
-import com.panacealab.panacare.utils.SHATool;
 import com.panacealab.panacare.utils.StateCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
+import javax.jws.Oneway;
 import java.util.*;
+/**
+ * @author loveloliii
+ * @description
+ * @date .
+ */
 @Service
 public class RecommendServiceImpl implements RecommendService {
     @Autowired
@@ -22,18 +26,38 @@ public class RecommendServiceImpl implements RecommendService {
         //通过特征码查询到推荐人的user_uniq_id
         String recommend_uniq_id = recommendDao.queryUniqId(user_referee);
         if(null==recommend_uniq_id || "".equals(recommend_uniq_id)){
-            return "668";
+            return StateCode.Referee_Invalid;
         }
         RecommendInfo recommendInfo = new RecommendInfo();
         recommendInfo.setRecommend_user_uniq_id(recommend_uniq_id);
         recommendInfo.setUser_uniq_id(user_uniq_id);
         int rs = recommendDao.insert(recommendInfo);
+        //添加记录
+        if(rs != 0){
+            //获取人数
+            int count  = recommendDao.queryRecommendRewardCount(user_uniq_id);
+            //直接123会影响后续修改
+            List<RecommendReward> countList = recommendDao.queryRecommendReward();
+            //未测试
+            for(RecommendReward r:countList){
+                    int c = r.getRecommend_reward_mount();
+                if(count>= c){
+                    int recommend_reward_id = recommendDao.queryRecommendRewardIdByCount(c);
+                    RecommendRewardRecord recommendRewardRecord = new RecommendRewardRecord();
+                    recommendRewardRecord.setUser_uniq_id(user_uniq_id);
+                    recommendRewardRecord.setRecommend_reward_id(recommend_reward_id);
+                    if(recommendDao.queryRecommendRewardRecordByRI(user_uniq_id,recommend_reward_id) ==0 ){
+                        recommendDao.insertRecommendRewardRecord(recommendRewardRecord);
+                    }
+                }
+            }
+        }
         return rs==0?"669":"670";
     }
 
     @Override
     public Map getRecommendRewardInfo() {
-        Map map = new HashMap();
+        Map<String, Object> map = new HashMap<>(16);
         List<RecommendReward> rewardList = recommendDao.queryRecommendReward();
         map.put("data",rewardList);
         map.put("state","1303");
@@ -41,9 +65,9 @@ public class RecommendServiceImpl implements RecommendService {
     }
 
     @Override
-    public Map getRecommendRewardRecord() {
-        Map map = new HashMap();
-        List<RecommendRewardRecord> recordList = recommendDao.queryRecommendRewardRecord();
+    public Map getRecommendRewardRecord(String user_uniq_id) {
+        Map<String, Object> map = new HashMap<>(16);
+        List<RecommendRewardRecord> recordList = recommendDao.queryRecommendRewardRecord(user_uniq_id);
         map.put("data",recordList);
         map.put("state","1303");
         return map;
@@ -67,17 +91,17 @@ public class RecommendServiceImpl implements RecommendService {
 
     @Override
     public Map getUserReferee(String user_uniq_id) {
-        Map map = new HashMap();
+        Map<String, Object> map = new HashMap<>(16);
         UserInfo userInfo = recommendDao.queryByUserReferee(user_uniq_id);
 
-        if(null==userInfo || "".equals(userInfo)){
+        if(null==userInfo){
             map.put("data","");
             map.put("state", StateCode.User_Not_Exist);
             return map;
         }
         //
-        String user_rteferee = userInfo.getUser_referee();
-        if(null==user_rteferee||"".equals(user_rteferee)){
+        String user_referee = userInfo.getUser_referee();
+        if(null==user_referee||"".equals(user_referee)){
 
             //生成新的特征码 来一种生成方式
            /*Calendar calendar =  Calendar.getInstance(TimeZone.getTimeZone("Asia/Shanghai"));
@@ -88,17 +112,15 @@ public class RecommendServiceImpl implements RecommendService {
             String str = "test";
             map.put("data",str);
         }else{
-            map.put("data",user_rteferee);
+            map.put("data",user_referee);
         }
-
-        //map.put("data",user_referee);
         map.put("state","1303");
         return map;
     }
 
     @Override
     public Map getRecommendRewardCount(String user_uniq_id) {
-        Map map = new HashMap();
+        Map<String, Object> map = new HashMap<>(16);
         int count = recommendDao.queryRecommendRewardCount(user_uniq_id);
         map.put("data",count);
         map.put("state","1303");

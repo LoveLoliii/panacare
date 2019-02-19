@@ -21,5 +21,6 @@
             <if test="recommend_reward_record_sendtime != null">recommend_reward_record_sendtime=#{recommend_reward_record_sendtime},</if>
             <if test="recommend_reward_record_getstate != null">recommend_reward_record_getstate=#{recommend_reward_record_getstate}</if>
         </set>
+
     </insert>
 </mapper>

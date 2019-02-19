@@ -50,6 +50,7 @@ public class StateCode {
     public static final String Login_Success_With_Token = "553";
     public static final String IO_Exception = "551";
     public static final String PWD_Error = "550";
+    public static final String Referee_Invalid = "668";
 
     //交易状态
     public enum  TradeState {

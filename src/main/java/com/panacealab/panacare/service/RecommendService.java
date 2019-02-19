@@ -9,18 +9,22 @@ public interface RecommendService {
 
     Map getRecommendRewardInfo();
 
-    Map getRecommendRewardRecord();
+    /**
+     * 通过uid获取该用户的奖励领取记录
+     * @param user_uniq_id uid
+     * @return Map
+     *
+     * */
+    Map<String,Object> getRecommendRewardRecord(String user_uniq_id);
+
     String addRecommendRewardRecord(RecommendRewardRecord recommendRewardRecord);
 
-
-
-
-@Deprecated
-//可以更新但没必要
+    /**
+     *可以更新但没必要
+     */
+    @Deprecated
     String updateRecommendRewardRecord(RecommendRewardRecord recommendRewardRecord);
-
     Map getUserReferee(String user_uniq_id);
-
     Map getRecommendRewardCount(String user_uniq_id);
 
 }

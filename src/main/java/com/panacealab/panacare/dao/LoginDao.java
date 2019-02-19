@@ -10,6 +10,14 @@ import java.util.List;
 
 @Mapper
 public interface LoginDao {
+
+    /**
+     * 查询用户信息
+     * @param value ?
+     * @param key ?
+     * @return List<UserInfo> 用户信息
+     * */
+
     @Select("SELECT * FROM user_info where user_mail= #{value}")
     @Results({
             @Result(property = "user_id", column = "user_id"),
@@ -20,7 +28,12 @@ public interface LoginDao {
     List<UserInfo> query(String key, String value);
 
 
-
+    /**
+     * 查询权限大于9的用户信息
+     * @param mail 其实不需要
+     * @param account 就是mail
+     * @return List<UserInfo> 用户信息
+     * */
     @Select("SELECT * FROM user_info where user_mail= #{account} and user_authority > 9")
     List<UserInfo> queryWithPermission(String mail, String account);
 }

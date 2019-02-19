@@ -20,18 +20,9 @@ static Logger logger = LoggerFactory.getLogger(StringUtil.class.getName());
     }
 
     public static void main(String[] args) {
-        //System.out.println(getUUID());
-        //logger.info("产生的UUID是：",getUUID());
 
-       /* StringBuffer fileArrayStr = new StringBuffer("1,2,3,");
-        String s = fileArrayStr.toString();
-
-
-        s = s.substring(0,fileArrayStr.length()-1);
-        System.out.println(s);*/
         List<String> l = new ArrayList<String>();
        for(int i=0;i<20;i++){
-
            //String orderNumber = getOrderNumber("1");
            //l.add(orderNumber);
            //System.out.println(orderNumber);
@@ -45,7 +36,7 @@ static Logger logger = LoggerFactory.getLogger(StringUtil.class.getName());
            l.add(orderNumber);
           //
            if((System.currentTimeMillis()- now)/1000 >= 1)
-               break;
+           {break;}
        }
         System.out.println(System.currentTimeMillis());
         System.out.println("------------------------开始寻找重复数据------------------------------------");
@@ -55,7 +46,7 @@ static Logger logger = LoggerFactory.getLogger(StringUtil.class.getName());
             for (int i =0;i<l.size();i++){
 
                 if (s.equals(l.get(i)))
-                    flag++;
+                {flag++;}
             }
             if (flag>1){
                 System.out.println("出现了重复订单号"+s);
@@ -70,7 +61,6 @@ static Logger logger = LoggerFactory.getLogger(StringUtil.class.getName());
         String date = sdf.format(System.currentTimeMillis());
         StringBuilder sb = new StringBuilder();
         sb.append(date);
-        //sb.append(goods_id.hashCode());
         int a = new Random().nextInt(10);
         int b = new Random().nextInt(10);
         int c = new Random().nextInt(10);
@@ -78,13 +68,8 @@ static Logger logger = LoggerFactory.getLogger(StringUtil.class.getName());
         int e = new Random().nextInt(10);
         int f = new Random().nextInt(10);
         AtomicLong atomicLong = new AtomicLong();
-        int uuidhash =UUID.randomUUID().toString().hashCode();// String.valueOf(Math.abs());
-       // String randomNumber4 =String.valueOf(a)+String.valueOf(b);//+String.valueOf(c)+String.valueOf(d)+String.valueOf(e)+String.valueOf(f);
-
-      ///  Long now =System.currentTimeMillis();
-      // String lastTime = now.toString().substring(now.toString().length()-2,now.toString().length());
-     //   sb.append(lastTime);
-        sb.append(String.format("%011d",Math.abs(uuidhash)));
+        int uuidHash =UUID.randomUUID().toString().hashCode();
+        sb.append(String.format("%011d",Math.abs(uuidHash)));
         return sb.toString();
     }
 }

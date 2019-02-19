@@ -23,18 +23,18 @@ public class SubscribeController {
     /***
      * uid（user_uniq_id）
      *通过uid获取一个用户的订阅信息
-     * @param token
-     * @param user_uniq_id
+     * @param token token
+     * @param user_uniq_id uuid
      * @return 返回订阅信息
      *token 和用户uid 要分开
      * */
    @RequestMapping(path = "getSubscribeInfoByUid",method = RequestMethod.POST)
     private Map getSubscribeInfoByUid(@RequestParam(name = "token",required = false)String token ,@RequestParam String user_uniq_id){
 
-       Map map = new HashMap();
+       Map map = new HashMap(2);
        map.put("state", "000");
        map.put("data", new ArrayList<>());
-       String code = "000";//= verifyToken(token); // token 验证
+       String code = "000";
        if(!StateCode.Initial_Code.equals(code)){
            map.put("state",code);
            return map;
@@ -57,7 +57,7 @@ public class SubscribeController {
        Map map = new HashMap();
        map.put("state", "000");
        map.put("data", new ArrayList<>());
-       String code = "000";//= verifyToken(token); // token 验证
+       String code = "000";
        if(!StateCode.Initial_Code.equals(code)){
            map.put("state",code);
            return map;
@@ -71,10 +71,7 @@ public class SubscribeController {
    @RequestMapping(path = "addSubscribeInfo",method = RequestMethod.POST)
     private String addSubscribeInfo(@RequestParam(name = "token",required = false)String  token, @RequestParam SubscribeInfo subscribeInfo){
     String state = "000" ;
-
-      //= verifyToken(token); // token 验证
        if(!StateCode.Initial_Code.equals(state)){
-
            return state;
        }
        //到这里的意思就是map值重新设定噜。
@@ -89,7 +86,8 @@ public class SubscribeController {
    @RequestMapping(path = "modifySubscribeInfo",method = RequestMethod.POST)
     private String modifySubscribeInfo(@RequestParam(name = "token",required = false)String token ,@RequestParam SubscribeInfo subscribeInfo){
         //验证token
-        String state = new TokenUtil().checkTokenWithRedis(token); //FIXME 存疑 能否正常注入且调用
+       //FIXME 存疑 能否正常注入且调用
+        String state = new TokenUtil().checkTokenWithRedis(token);
        if(!StateCode.Initial_Code.equals(state)){
 
            return state;
@@ -100,9 +98,9 @@ public class SubscribeController {
            return StateCode.Lack_User_Uniq_ID;
        }
 
-       if(!user_uniq_id.equals(TokenUtil.getTokenValues(token)))
+       if(!user_uniq_id.equals(TokenUtil.getTokenValues(token))) {
            return StateCode.Not_The_Same_User;
-
+       }
 
        //只需返回修改结果 成功或者没有 直接返回code
        return state = subscribeService.modifySubscribeInfo(subscribeInfo);
