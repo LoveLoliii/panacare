@@ -9,23 +9,22 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.panacealab.panacare.entity.UserInfo;
 import com.panacealab.panacare.service.IRedisService;
 import jdk.nashorn.internal.parser.Token;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Properties;
-import java.util.logging.Logger;
 /**
  * @author loveloliii
  *
  * */
 @Component
 public class TokenUtil {
-    private static Logger logger = Logger.getLogger("com.panacealab.panacare.utils.TokenUtil");
+    private static Logger logger = LoggerFactory.getLogger(TokenUtil.class);
     @Autowired
     private IRedisService iRedisService;
     public static TokenUtil tokenUtil;
@@ -99,7 +98,6 @@ public class TokenUtil {
                     .build(); //Reusable verifier instance
             DecodedJWT jwt = verifier.verify(token);
             //验证有效
-            logger.info("token verified");
             return true;
         } catch (JWTVerificationException exception){
             //Invalid signature/claims
@@ -118,7 +116,6 @@ public class TokenUtil {
         try {
             DecodedJWT jwt = JWT.decode(token);
             rs = jwt.getAudience().get(0);
-            logger.info(rs.toString());
         } catch (JWTDecodeException exception){
             //Invalid token
             return StateCode.Token_Verify_Fail;
@@ -153,7 +150,6 @@ public class TokenUtil {
             if (!token.equals(tokenUtil.iRedisService.get(user_uniq_id))) {
                 //token 不相同 验证不通过
                 return StateCode.Token_Diff_With_Redis;
-
             }
         }
         return StateCode.Initial_Code;

@@ -30,31 +30,23 @@ public class SignServiceImpl implements SignService {
 
     @Override
     public String getVerificationCode(String mail) {
-
-
         String code = "123456";
         String rs = "";
-
         //检查邮箱是否已注册
         List userList = loginDao.query("",mail);
-
         if(userList.size()>0){
-
         }else{
             //检查数据库中是否存在未过期的可用的验证码
             List result = signDao.query("mail_validate_mail", mail);
             if (result.size() > 0) {
                 //取最新bothtime对比
                 result.sort(Comparator.reverseOrder());
-
-
                 //存在未使用验证码，对有效期进行检验
                 logger.info("查询到数据库内有记录，验证有效性。");
                 MailValidate mailValidate = (MailValidate) result.get(0);
                 Long bothtime = Long.valueOf(mailValidate.getMail_validate_codeboth()), time_range = Long.valueOf(mailValidate.getMail_validate_time_range());
                 Long now = System.currentTimeMillis() / 1000;
                 Long remnant = bothtime + time_range - now;
-
                 logger.info("remant:" + remnant);
                 if (remnant > 0) {
                     if (remnant > 300) {
@@ -73,7 +65,6 @@ public class SignServiceImpl implements SignService {
                     code = MailSendUtil.getRandomCode6();
                     //save code
                     signDao.insert(code, mail, String.valueOf(System.currentTimeMillis() / 1000));
-
                 }
             }  else {
                 logger.info("未查询到数据库内有记录，生成新验证码。");
@@ -82,8 +73,6 @@ public class SignServiceImpl implements SignService {
                 //save code
                 signDao.insert(code, mail, String.valueOf(System.currentTimeMillis() / 1000));
             }
-
-
             //send code
             MailInfo mailInfo = new MailInfo();
             Properties p = new Properties();
@@ -145,8 +134,6 @@ public class SignServiceImpl implements SignService {
         if (result.size() > 0) {
             //取出最新记录
             result.sort(Comparator.reverseOrder());
-
-
             //存在未使用验证码，对有效期进行检验
             logger.info("查询到数据库内有记录，验证有效性。");
             MailValidate mailValidate = (MailValidate) result.get(0);
@@ -195,7 +182,6 @@ public class SignServiceImpl implements SignService {
         if("542".equals(rs)){
             //验证成功 写入用户信息到数据库
             //mybatis 存储 entity
-
             //mybatis 不能重载
             try {
                 u.setUser_mail(mail);
@@ -206,7 +192,8 @@ public class SignServiceImpl implements SignService {
             }catch (Exception e){
                 e.printStackTrace();
                 logger.error("注册数据库错误：{}",e.getMessage());
-                rs="546";//无法catch
+                //无法catch
+                rs="546";
             }
 
         }

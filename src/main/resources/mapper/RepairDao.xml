@@ -4,7 +4,30 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.panacealab.panacare.dao.RepairDao">
     <insert id="insert" parameterType="com.panacealab.panacare.entity.RepairInfo">
-       insert into repair_info (user_uniq_id,repair_problem_description,repair_file_name,repair_create_time,
+       <!--insert into repair_info (user_uniq_id,repair_problem_description,repair_file_id,repair_create_time,
         repair_handling_state)values(#{user_uniq_id},#{repair_problem_description},#{repair_file_name},#{repair_create_time},"未处理")
+       -->
+        insert into repair_info
+        <set>
+            <if test="user_uniq_id != null">user_uniq_id = #{user_uniq_id},</if>
+            <if test="repair_problem_description != null">repair_problem_description = #{repair_problem_description},</if>
+            <if test="repair_file_id != null">repair_file_id = #{repair_file_id},</if>
+            <if test="repair_create_time != null">repair_create_time = #{repair_create_time},</if>
+            <if test="repair_handling_state != null">repair_handling_state = "未处理"</if>
+        </set>
+
+    </insert>
+
+
+
+
+
+    <insert id="insertFileInfo" keyProperty="file_id" useGeneratedKeys="true" parameterType="com.panacealab.panacare.entity.FileInfo"   >
+
+        insert into file_info(file_name)
+        values(#{file_name})
+        <!-- <selectKey keyProperty="file_id" order="AFTER" resultType="java.lang.Integer">
+            SELECT LAST_INSERT_ID()
+        </selectKey>-->
     </insert>
 </mapper>

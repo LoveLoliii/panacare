@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panacealab.panacare.dao.SuggestionDao">
+    <insert id="insertSuggestion" parameterType="com.panacealab.panacare.entity.Suggestion">
+        <!--insert into repair_info (user_uniq_id,repair_problem_description,repair_file_id,repair_create_time,
+         repair_handling_state)values(#{user_uniq_id},#{repair_problem_description},#{repair_file_name},#{repair_create_time},"未处理")
+        -->
+        insert into suggestion
+        <set>
+            <if test="user_uniq_id != null">user_uniq_id = #{user_uniq_id},</if>
+            <if test="suggestion_description != null">suggestion_description = #{suggestion_description},</if>
+            <if test="suggestion_time != null">suggestion_time = #{suggestion_time},</if>
+            <if test="suggestion_state != null">suggestion_state = #{suggestion_state}</if>
+        </set>
+
+    </insert>
+</mapper>

@@ -2,10 +2,10 @@ package com.panacealab.panacare.entity;
 
 public class RepairInfo {
     private Integer repair_id;
-    private String  user_uniq_id;
+    private String user_uniq_id;
     private Integer customer_service_id;
     private String repair_problem_description;
-    private String repair_file_name;
+    private String repair_file_id;
     private String repair_create_time;
     private String repair_handling_state;
 
@@ -41,12 +41,12 @@ public class RepairInfo {
         this.repair_problem_description = repair_problem_description;
     }
 
-    public String getRepair_file_name() {
-        return repair_file_name;
+    public String getRepair_file_id() {
+        return repair_file_id;
     }
 
-    public void setRepair_file_name(String repair_file_name) {
-        this.repair_file_name = repair_file_name;
+    public void setRepair_file_id(String repair_file_id) {
+        this.repair_file_id = repair_file_id;
     }
 
     public String getRepair_create_time() {
@@ -56,6 +56,7 @@ public class RepairInfo {
     public void setRepair_create_time(String repair_create_time) {
         this.repair_create_time = repair_create_time;
     }
+
 
     public String getRepair_handling_state() {
         return repair_handling_state;
@@ -69,11 +70,12 @@ public class RepairInfo {
     public String toString() {
         return "RepairInfo{" +
                 "repair_id=" + repair_id +
-                ", user_uniq_id=" + user_uniq_id +
+                ", user_uniq_id='" + user_uniq_id + '\'' +
                 ", customer_service_id=" + customer_service_id +
                 ", repair_problem_description='" + repair_problem_description + '\'' +
-                ", repair_file_name='" + repair_file_name + '\'' +
-                ", repair_handling_state='" + repair_handling_state + '\'' +
+                ", repair_file_id=" + repair_file_id +
+                ", repair_create_time='" + repair_create_time + '\'' +
+                ", repair_handing_state='" + repair_handling_state + '\'' +
                 '}';
     }
 }

@@ -31,7 +31,7 @@ public class SignController {
     @RequestMapping(path="sign",method = RequestMethod.POST)
     private String appSign(@RequestBody Map map){
        Gson g = new Gson();
-        // 封装用户信息
+        // FIXME u 可能存在为null风险 （无法反序列化）封装用户信息
         UserInfo u = g.fromJson(String.valueOf(map.get("user_info")),UserInfo.class);
         String mail = (String) map.get("mail");
         String code = (String) map.get("code");
