@@ -5,6 +5,7 @@ import com.panacealab.panacare.entity.GoodsInfo;
 import com.panacealab.panacare.entity.OrderInfo;
 import com.panacealab.panacare.entity.SubscribeInfo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 @Mapper
 public interface PayDao {
@@ -18,7 +19,7 @@ public interface PayDao {
 
     OrderInfo queryOrderInfo(String order_number);
 
-    void updateOrderInfo(String order_number);
+    void updateOrderInfo(@Param("order_number") String order_number);
 
-    void updateAlipaymentOrder(String order_number);
+    void updateAlipaymentOrder(@Param("order_number")String order_number);
 }

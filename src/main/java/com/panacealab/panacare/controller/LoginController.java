@@ -60,12 +60,12 @@ private final static Logger logger= LoggerFactory.getLogger("LoginController") ;
         String token = (String) map.get("token");
         logger.info("token:"+token);
         String rs = TokenUtil.checkLoginState(token);
-        if (!StateCode.Initial_Code.equals(rs)) {
+        if (!StateCode.INITIAL_CODE.equals(rs)) {
             resultMap.put("state", rs);
             return resultMap;
         }
 
-        resultMap.put("state",StateCode.Token_Verify_Success);
+        resultMap.put("state",StateCode.TOKEN_VERIFY_SUCCESS);
         return resultMap;
     }
 

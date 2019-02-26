@@ -1,17 +1,20 @@
 package com.panacealab.panacare.entity;
-
-public class OrderInfo {                //订单信息
-
-    private Integer order_id;           //订单ID
-    private String order_number;        //订单编号
-    private String goods_uniq_id;       //商品uid
-    private String user_uniq_id;        //用户UUID
-    private Integer order_counts;       //数量
-    private String order_state;         //订单状态
-    private String order_created_time;  //订单生成时间
-    private String order_pay_way;       //支付方式
-    private String order_finished_time; //订单结束时间
-
+//订单信息
+/**
+ * @author loveloliii
+ * */
+public class OrderInfo {
+    private Integer order_id;
+    private String order_number;
+    private String goods_uniq_id;
+    private String user_uniq_id;
+    private Integer order_counts;
+    private String order_state;
+    private String order_created_time;
+    private String order_pay_way;
+    private String order_finished_time;
+    private Integer order_is_subscribe;
+    private String order_address;
 
     public Integer getOrder_id() {
         return order_id;
@@ -85,6 +88,22 @@ public class OrderInfo {                //订单信息
         this.order_finished_time = order_finished_time;
     }
 
+    public Integer getOrder_is_subscribe() {
+        return order_is_subscribe;
+    }
+
+    public void setOrder_is_subscribe(Integer order_is_subscribe) {
+        this.order_is_subscribe = order_is_subscribe;
+    }
+
+    public String getOrder_address() {
+        return order_address;
+    }
+
+    public void setOrder_address(String order_address) {
+        this.order_address = order_address;
+    }
+
     @Override
     public String toString() {
         return "OrderInfo{" +
@@ -95,6 +114,10 @@ public class OrderInfo {                //订单信息
                 ", order_counts=" + order_counts +
                 ", order_state='" + order_state + '\'' +
                 ", order_created_time='" + order_created_time + '\'' +
+                ", order_pay_way='" + order_pay_way + '\'' +
+                ", order_finished_time='" + order_finished_time + '\'' +
+                ", order_is_subscribe=" + order_is_subscribe +
+                ", order_address='" + order_address + '\'' +
                 '}';
     }
 }

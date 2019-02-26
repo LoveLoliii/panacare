@@ -17,8 +17,8 @@
             <!--<if test="user_uniq_id != null">user_uniq_id=#{user_uniq_id},</if>-->
             <!--<if test="order_counts != null">order_counts=#{order_counts}</if>-->
             <if test="order_state != null">order_state=#{order_state}</if>
-            <if test="order_pay_way != null">order_state=#{order_pay_way}</if>
-            <if test="order_finished_time != null">order_created_time=#{order_finished_time}</if>
+            <if test="order_pay_way != null">order_pay_way=#{order_pay_way}</if>
+            <if test="order_finished_time != null">order_finished_time=#{order_finished_time}</if>
         </set>
     </update>
 

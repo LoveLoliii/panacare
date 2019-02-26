@@ -1,7 +1,5 @@
 package com.panacealab.panacare.service.impl;
 
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.panacealab.panacare.dao.LoginDao;
 import com.panacealab.panacare.entity.UserInfo;
@@ -34,7 +32,7 @@ public class LoginServiceImpl implements LoginService {
         //默认邮箱 有需求再做处理
         List rs = loginDao.query("mail",account);
 
-        String state = StateCode.JWT_CException; //"552";//0表示失败
+        String state = StateCode.JWT_C_EXCEPTION; //"552";//0表示失败
         Map<String,String> resultMap = new HashMap<>();
 
         if(rs.size()>0){
@@ -42,12 +40,12 @@ public class LoginServiceImpl implements LoginService {
             //System.out.println(((UserInfo)rs.get(0)).getUser_mail());
             if(userInfo.getUser_pwd().equals(pwd)){
                 //返回验证信息与token
-                resultMap.put("state",StateCode.Login_Success_With_Token);//"553"
+                resultMap.put("state",StateCode.LOGIN_SUCCESS_WITH_TOKEN);//"553"
                 //put token
                 try {
                     String token =TokenUtil.createToken(userInfo);
                     resultMap.put("token",token);
-                    state =StateCode.Login_Success_With_Token;
+                    state =StateCode.LOGIN_SUCCESS_WITH_TOKEN;
                     //更新redis数据
                     //删除与用户uniq_id相同的key
                     iRedisService.remove(userInfo.getUser_uniq_id());
@@ -55,21 +53,21 @@ public class LoginServiceImpl implements LoginService {
                     iRedisService.put(userInfo.getUser_uniq_id(),token,Integer.valueOf(ex));
                 } catch (JWTCreationException exception){
                     logger.info("Invalid Signing configuration / Couldn't convert Claims.");
-                    state = StateCode.JWT_CException;
+                    state = StateCode.JWT_C_EXCEPTION;
                 } catch (IOException e) {
                     e.printStackTrace();
-                    state = StateCode.IO_Exception;
+                    state = StateCode.IO_EXCEPTION;
                 }finally {
                       resultMap.put("state",state);//state表示是否登陆成功。
                 }
                 return resultMap;
             }
             //密码不正确，返回失败信息
-            resultMap.put("state",StateCode.PWD_Error);
+            resultMap.put("state",StateCode.PWD_ERROR);
             return resultMap;
         }
         //用户不存在，返回失败信息
-        resultMap.put("state",StateCode.User_Not_Exist);
+        resultMap.put("state",StateCode.USER_NOT_EXIST);
         return resultMap;
 
     }
@@ -79,7 +77,7 @@ public class LoginServiceImpl implements LoginService {
         //默认邮箱 有需求再做处理
         List rs = loginDao.queryWithPermission("mail",account);
 
-        String state =StateCode.JWT_CException;//0表示失败
+        String state =StateCode.JWT_C_EXCEPTION;//0表示失败
         Map<String,String> resultMap = new HashMap<>();
 
         if(rs.size()>0){
@@ -87,12 +85,12 @@ public class LoginServiceImpl implements LoginService {
             //System.out.println(((UserInfo)rs.get(0)).getUser_mail());
             if(userInfo.getUser_pwd().equals(pwd)){
                 //返回验证信息与token
-                resultMap.put("state",StateCode.Login_Success_With_Token);
+                resultMap.put("state",StateCode.LOGIN_SUCCESS_WITH_TOKEN);
                 //put token
                 try {
                     String token = TokenUtil.createToken(userInfo);
                     resultMap.put("token",token);
-                    state = StateCode.Login_Success_With_Token;
+                    state = StateCode.LOGIN_SUCCESS_WITH_TOKEN;
                     //更新redis数据
                     //删除与用户uniq_id相同的key
                     iRedisService.remove(userInfo.getUser_uniq_id());
@@ -100,21 +98,21 @@ public class LoginServiceImpl implements LoginService {
                     iRedisService.put(userInfo.getUser_uniq_id(),token,Integer.valueOf(ex));
                 } catch (JWTCreationException exception){
                     logger.info("Invalid Signing configuration / Couldn't convert Claims.");
-                    state =StateCode.JWT_CException;
+                    state =StateCode.JWT_C_EXCEPTION;
                 } catch (IOException e) {
                     e.printStackTrace();
-                    state = StateCode.IO_Exception;
+                    state = StateCode.IO_EXCEPTION;
                 }finally {
                     resultMap.put("state",state);//state表示是否登陆成功。
                 }
                 return resultMap;
             }
             //密码不正确，返回失败信息
-            resultMap.put("state",StateCode.PWD_Error);
+            resultMap.put("state",StateCode.PWD_ERROR);
             return resultMap;
         }
         //用户不存在，返回失败信息
-        resultMap.put("state",StateCode.User_Not_Exist);
+        resultMap.put("state",StateCode.USER_NOT_EXIST);
         return resultMap;
     }
 

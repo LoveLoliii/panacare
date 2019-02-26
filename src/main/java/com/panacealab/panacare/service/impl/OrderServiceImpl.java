@@ -40,13 +40,13 @@ public class OrderServiceImpl implements OrderService {
         }catch (Exception e){
             logger.error("订单信息插入失败！by:{}",e.getMessage());
             e.printStackTrace();
-            map.put("state", StateCode.Database_Insert_Error);
+            map.put("state", StateCode.DATABASE_INSERT_ERROR);
             return map;
         }
         if(0==rs){
-            map.put("state",StateCode.Database_Not_Insert);
+            map.put("state",StateCode.DATABASE_NOT_INSERT);
         }else {
-            map.put("state",StateCode.Database_Insert_Success);
+            map.put("state",StateCode.DATABASE_INSERT_SUCCESS);
             map.put("data",order_number);
         }
         return map;
@@ -58,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
         // 检查订单状态
         OrderInfo orderInfo = orderDao.query(order_number);
         String state = orderInfo.getOrder_state();
-        if(!StateCode.Order_Pending_Payment.equals(state)){
+        if(!StateCode.ORDER_PENDING_PAYMENT.equals(state)){
             //订单状态为 订单超时取消  用户完成支付 待发货 已发货 订单完成 订单关闭
             map.put("state",state);
            // map.put("data",);

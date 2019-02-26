@@ -8,7 +8,6 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.panacealab.panacare.entity.UserInfo;
 import com.panacealab.panacare.service.IRedisService;
-import jdk.nashorn.internal.parser.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,13 +39,13 @@ public class TokenUtil {
     public static String checkLoginState(String token) {
         //token 自我验证
         boolean t = verifyToken(token);
-        String code = StateCode.Initial_Code;
+        String code = StateCode.INITIAL_CODE;
         if(t){
             //进行redis验证
            return tokenUtil.checkTokenWithRedis(token);
         }
         else{
-            return StateCode.Token_Validate_Self_Error;
+            return StateCode.TOKEN_VALIDATE_SELF_ERROR;
         }
     }
 
@@ -118,7 +117,7 @@ public class TokenUtil {
             rs = jwt.getAudience().get(0);
         } catch (JWTDecodeException exception){
             //Invalid token
-            return StateCode.Token_Verify_Fail;
+            return StateCode.TOKEN_VERIFY_FAIL;
         }
         return rs;
     }
@@ -134,9 +133,9 @@ public class TokenUtil {
     public  String checkTokenWithRedis(String token){
         if (token == null || "".equals(token)) {
             //状态码详情查看api文档
-            return StateCode.Login_With_Not_Token;
+            return StateCode.LOGIN_WITH_NOT_TOKEN;
         } else if (!TokenUtil.verifyToken(token)) {
-            return StateCode.Token_Verify_Fail;
+            return StateCode.TOKEN_VERIFY_FAIL;
         } else {
             //验证token唯一性
             //获取用户uniq_id
@@ -144,14 +143,14 @@ public class TokenUtil {
             //查询redis是否存在该用户
             if (!tokenUtil.iRedisService.isKeyExists(user_uniq_id)) {
                 //不存在用户token
-                return StateCode.Token_Not_In_Redis;
+                return StateCode.TOKEN_NOT_IN_REDIS;
             }
             //存在token 进行对比
             if (!token.equals(tokenUtil.iRedisService.get(user_uniq_id))) {
                 //token 不相同 验证不通过
-                return StateCode.Token_Diff_With_Redis;
+                return StateCode.TOKEN_DIFF_WITH_REDIS;
             }
         }
-        return StateCode.Initial_Code;
+        return StateCode.INITIAL_CODE;
     }
 }

@@ -15,10 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -37,7 +34,7 @@ public class RepairController {
     @RequestMapping(path = "submitRepairMsg", method = RequestMethod.POST)
     private String submitRepairMsg(HttpServletRequest httpServletRequest, @RequestParam(value = "token", required = false) String token) {
         String  code = TokenUtil.getTokenValues(token);
-        if (!StateCode.Initial_Code.equals(code))
+        if (!StateCode.INITIAL_CODE.equals(code))
         {return code;}
         String user_uniq_id = TokenUtil.getTokenValues(token);
         Map<String,Map> mapData;
@@ -49,16 +46,16 @@ public class RepairController {
     @RequestMapping(path = "saveRepairInfo",method = RequestMethod.POST)
     private Map saveRepairInfo(@RequestBody Map map){
         Map<String,Object> resultMap = new HashMap<>(16);
-        resultMap.put("state", StateCode.Initial_Code);
+        resultMap.put("state", StateCode.INITIAL_CODE);
         //验证token
         String token = (String) map.get("token");
         String rs = TokenUtil.checkLoginState(token);
-        if (!StateCode.Initial_Code.equals(rs)) {
+        if (!StateCode.INITIAL_CODE.equals(rs)) {
             resultMap.put("state", rs);
             return resultMap;
         }
         //todo 保存保修信息
-        Gson g = new Gson();
+        Gson g = PUtils.getGsonInstance();
         RepairInfo repairInfo = g.fromJson(String.valueOf(map.get("repair_info")),RepairInfo.class);
 
         repairInfo.setUser_uniq_id(TokenUtil.getTokenValues(token));
@@ -66,9 +63,9 @@ public class RepairController {
 
         int insertRs = repairService.saveRepairInfo(repairInfo);
         if(insertRs>0){
-            resultMap.put("state",StateCode.Data_Return_Success);
+            resultMap.put("state",StateCode.DATA_RETURN_SUCCESS);
         }else {
-            resultMap.put("state",StateCode.Database_Insert_Error);
+            resultMap.put("state",StateCode.DATABASE_INSERT_ERROR);
         }
         return resultMap;
     }
@@ -79,11 +76,11 @@ public class RepairController {
         Map<String,Map> mapData;
         mapData = FileUtil.saveFile(httpServletRequest);
         Map<String,Object> resultMap = new HashMap<>(16);
-        resultMap.put("state", StateCode.Initial_Code);
+        resultMap.put("state", StateCode.INITIAL_CODE);
         //验证token
        String token = (String) mapData.get("map").get("token");
         String rs = TokenUtil.checkLoginState(token);
-        if (!StateCode.Initial_Code.equals(rs)) {
+        if (!StateCode.INITIAL_CODE.equals(rs)) {
             resultMap.put("state", rs);
             return resultMap;
         }
@@ -98,9 +95,9 @@ public class RepairController {
                 rs2 = repairService.saveSingleFileInfo(fileInfo);
             } catch (Exception e) {
                 e.printStackTrace();
-                resultMap.put("state",StateCode.Database_Insert_Error);
+                resultMap.put("state",StateCode.DATABASE_INSERT_ERROR);
             }
-            resultMap.put("state",StateCode.Data_Return_Success);
+            resultMap.put("state",StateCode.DATA_RETURN_SUCCESS);
             resultMap.put("data",rs2);
         }
         return resultMap;

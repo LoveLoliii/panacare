@@ -4,7 +4,6 @@ import com.panacealab.panacare.entity.GoodsInfo;
 import com.panacealab.panacare.entity.OrderInfo;
 import com.panacealab.panacare.service.OrderService;
 import com.panacealab.panacare.utils.*;
-import jdk.nashorn.internal.parser.Token;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +36,7 @@ public class OrderController {
         //验证token
         String  code = TokenUtil.getTokenValues(token);
         map.put("state",code);
-        if (!StateCode.Initial_Code.equals(code))
+        if (!StateCode.INITIAL_CODE.equals(code))
         {return map;}
         //检查库存由前端来做
         //生成订单
@@ -52,7 +51,7 @@ public class OrderController {
         long random = (long) (Math.random()*100000);
         order_number = String.valueOf(Long.valueOf(time)*100000+random);
         //订单状态 默认值
-        String order_state = StateCode.Order_Pending_Payment;
+        String order_state = StateCode.ORDER_PENDING_PAYMENT;
         String order_created_time = time;
         //保存到数据库
         map = orderService.saveOrder(goods_uniq_id,counts,order_number,order_state,order_created_time);
@@ -72,7 +71,7 @@ public class OrderController {
         Map map = new HashMap(16);
         String code = new TokenUtil().checkTokenWithRedis(token);
         map.put("state",code);
-        if (!StateCode.Initial_Code.equals(code))
+        if (!StateCode.INITIAL_CODE.equals(code))
         { return map;}
         String user_uniq_id = TokenUtil.getTokenValues(token);
         map = orderService.createWXPayOrder(user_uniq_id,order_number);
@@ -130,9 +129,9 @@ public class OrderController {
                     ){
 
                         // 变更支付方式为wx
-                        orderInfo.setOrder_pay_way(StateCode.Pay_Way_WX);
+                        orderInfo.setOrder_pay_way(StateCode.PAY_WAY_WX);
                         // 订单状态为已付款
-                        orderInfo.setOrder_state(StateCode.Order_Purchased);
+                        orderInfo.setOrder_state(StateCode.ORDER_PURCHASED);
                         orderInfo.setOrder_finished_time(String.valueOf(System.currentTimeMillis()));
                          // 变更数据库中该订单状态
                         orderService.changeOrderState(orderInfo);

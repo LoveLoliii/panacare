@@ -30,11 +30,11 @@ public class SuggestionController {
     @RequestMapping(path = "saveSuggestInfo",method = RequestMethod.POST)
     private Map saveSuggestInfo(@RequestBody Map map){
         Map<String,Object> resultMap = new HashMap<>(16);
-        resultMap.put("state", StateCode.Initial_Code);
+        resultMap.put("state", StateCode.INITIAL_CODE);
         //验证token
         String token = (String) map.get("token");
         String rs = TokenUtil.checkLoginState(token);
-        if (!StateCode.Initial_Code.equals(rs)) {
+        if (!StateCode.INITIAL_CODE.equals(rs)) {
             resultMap.put("state", rs);
             return resultMap;
         }
@@ -48,9 +48,9 @@ public class SuggestionController {
         suggestion.setSuggestion_time(String.valueOf(System.currentTimeMillis()));
         int insertRs = suggestionService.saveSuggestion(suggestion);
         if(insertRs>0){
-            resultMap.put("state",StateCode.Data_Return_Success);
+            resultMap.put("state",StateCode.DATA_RETURN_SUCCESS);
         }else {
-            resultMap.put("state",StateCode.Database_Insert_Error);
+            resultMap.put("state",StateCode.DATABASE_INSERT_ERROR);
         }
         return resultMap;
     }

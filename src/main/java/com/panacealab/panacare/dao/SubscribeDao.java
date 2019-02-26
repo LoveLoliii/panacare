@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+
 @Mapper
 public interface SubscribeDao {
     @Select("SELECT * FROM subscribe_info WHERE user_uniq_id = #{user_uniq_id}")
@@ -14,9 +15,16 @@ public interface SubscribeDao {
     @Select("SELECT * FROM subscribe_info")
     List<SubscribeInfo> queryAll();
 
-    //对于直接插入对象 可能不行 需要具体到属性进行插入 考虑使用xml
-    @Insert("INSERT INTO subscribe_info")
+
     int insert(SubscribeInfo subscribeInfo);
 
     int update(SubscribeInfo subscribeInfo);
+
+    /***
+     * 查询重复数量
+     * @param userUniqId uud
+     * @param goodsUniqId gud
+     * @return int 存在数量
+     */
+    int queryRS(String userUniqId, String goodsUniqId);
 }

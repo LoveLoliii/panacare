@@ -10,7 +10,6 @@ import com.panacealab.panacare.utils.StateCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.jws.Oneway;
 import java.util.*;
 /**
  * @author loveloliii
@@ -26,7 +25,7 @@ public class RecommendServiceImpl implements RecommendService {
         //通过特征码查询到推荐人的user_uniq_id
         String recommend_uniq_id = recommendDao.queryUniqId(user_referee);
         if(null==recommend_uniq_id || "".equals(recommend_uniq_id)){
-            return StateCode.Referee_Invalid;
+            return StateCode.REFEREE_INVALID;
         }
         RecommendInfo recommendInfo = new RecommendInfo();
         recommendInfo.setRecommend_user_uniq_id(recommend_uniq_id);
@@ -96,7 +95,7 @@ public class RecommendServiceImpl implements RecommendService {
 
         if(null==userInfo){
             map.put("data","");
-            map.put("state", StateCode.User_Not_Exist);
+            map.put("state", StateCode.USER_NOT_EXIST);
             return map;
         }
         //

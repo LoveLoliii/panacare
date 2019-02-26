@@ -3,6 +3,7 @@ package com.panacealab.panacare.service.impl;
 import com.panacealab.panacare.dao.SubscribeDao;
 import com.panacealab.panacare.entity.SubscribeInfo;
 import com.panacealab.panacare.service.SubscribeService;
+import com.panacealab.panacare.utils.StateCode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ public class SubscribeServiceImpl implements SubscribeService {
 
         int rs = subscribeDao.insert(subscribeInfo);
 
-        return rs==0?"":"";
+        return rs==0? StateCode.DATABASE_INSERT_ERROR :StateCode.DATA_RETURN_SUCCESS;
     }
 
     @Override
@@ -70,5 +71,11 @@ public class SubscribeServiceImpl implements SubscribeService {
 
         int rs = subscribeDao.update(subscribeInfo);
         return rs==0?"":"";
+    }
+
+    @Override
+    public int checkRepeatSub(String userUniqId, String goodsUniqId) {
+        int rs = subscribeDao.queryRS(userUniqId,goodsUniqId);
+        return rs;
     }
 }

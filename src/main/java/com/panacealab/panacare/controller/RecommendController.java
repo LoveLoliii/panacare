@@ -5,7 +5,6 @@ import com.panacealab.panacare.service.IRedisService;
 import com.panacealab.panacare.service.RecommendService;
 import com.panacealab.panacare.utils.StateCode;
 import com.panacealab.panacare.utils.TokenUtil;
-import javafx.collections.ObservableMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,9 +33,9 @@ public class RecommendController {
         String user_uniq_id;
         if (token == null || "".equals(token)) {
             //状态码详情查看api文档
-            return StateCode.Login_With_Not_Token;
+            return StateCode.LOGIN_WITH_NOT_TOKEN;
         } else if (!TokenUtil.verifyToken(token)) {
-            return StateCode.Token_Verify_Fail;
+            return StateCode.TOKEN_VERIFY_FAIL;
         } else {
             //验证token唯一性
             //获取用户uniq_id
@@ -44,15 +43,15 @@ public class RecommendController {
             //查询redis使用存在该用户
             if (!iRedisService.isKeyExists(user_uniq_id)) {
                 //不存在用户token
-                return StateCode.Token_Not_In_Redis;
+                return StateCode.TOKEN_NOT_IN_REDIS;
             }
             //存在token 进行对比
             if (!token.equals(iRedisService.get(user_uniq_id))) {
                 //token 不相同 验证不通过
-                return StateCode.Token_Diff_With_Redis;
+                return StateCode.TOKEN_DIFF_WITH_REDIS;
             }
         }
-        return StateCode.Initial_Code;
+        return StateCode.INITIAL_CODE;
     }
 
     /**
@@ -61,11 +60,11 @@ public class RecommendController {
     @RequestMapping(path = "getUserReferee",method = RequestMethod.POST)
     private Map getUserReferee(@RequestParam Map map){
         Map resultMap = new HashMap();
-        resultMap.put("state", StateCode.Initial_Code);
+        resultMap.put("state", StateCode.INITIAL_CODE);
         //验证token
         String token = (String) map.get("token");
         String rs = TokenUtil.checkLoginState(token);
-        if (!StateCode.Initial_Code.equals(rs)) {
+        if (!StateCode.INITIAL_CODE.equals(rs)) {
             resultMap.put("state", rs);
             return resultMap;
         }
@@ -85,11 +84,11 @@ public class RecommendController {
     @RequestMapping(path = "createReferee",method = RequestMethod.POST)
     private Map createReferee(@RequestBody Map map){
         Map resultMap = new HashMap();
-        resultMap.put("state", StateCode.Initial_Code);
+        resultMap.put("state", StateCode.INITIAL_CODE);
         //验证token
         String token = (String) map.get("token");
         String rs = TokenUtil.checkLoginState(token);
-        if (!StateCode.Initial_Code.equals(rs)) {
+        if (!StateCode.INITIAL_CODE.equals(rs)) {
             resultMap.put("state", rs);
             return resultMap;
         }
@@ -105,11 +104,11 @@ public class RecommendController {
     @RequestMapping(path = "addRecommendInfo", method = RequestMethod.POST)
     private Map addRecommendInfo(@RequestBody Map map) {
         Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("state", StateCode.Initial_Code);
+        resultMap.put("state", StateCode.INITIAL_CODE);
         //验证token
         String token = (String) map.get("token");
         String rs = TokenUtil.checkLoginState(token);
-        if (!StateCode.Initial_Code.equals(rs)) {
+        if (!StateCode.INITIAL_CODE.equals(rs)) {
             resultMap.put("state", rs);
             return resultMap;
         }
@@ -140,11 +139,11 @@ public class RecommendController {
     private Map getRecommendRewardCount(@RequestBody Map map) {
         logger.info("\n进入getRecommendRewardCount方法");
         Map<String,Object> resultMap = new HashMap<>(16);
-        resultMap.put("state", StateCode.Initial_Code);
+        resultMap.put("state", StateCode.INITIAL_CODE);
         //验证token
         String token = (String) map.get("token");
         String rs = TokenUtil.checkLoginState(token);
-        if (!StateCode.Initial_Code.equals(rs)) {
+        if (!StateCode.INITIAL_CODE.equals(rs)) {
             resultMap.put("state", rs);
             return resultMap;
         }
@@ -162,11 +161,11 @@ public class RecommendController {
     private Map getRecommendRewardRecord(@RequestBody Map map) {
         logger.info("\n进入getRecommendRewardRecord方法");
         Map<String,Object> resultMap = new HashMap<>(16);
-        resultMap.put("state", StateCode.Initial_Code);
+        resultMap.put("state", StateCode.INITIAL_CODE);
         //验证token
         String token = (String) map.get("token");
         String rs = TokenUtil.checkLoginState(token);
-        if (!StateCode.Initial_Code.equals(rs)) {
+        if (!StateCode.INITIAL_CODE.equals(rs)) {
             resultMap.put("state", rs);
             return resultMap;
         }
@@ -183,7 +182,7 @@ public class RecommendController {
     private String addRecommendRewardRecord(@RequestParam String token,@RequestParam RecommendRewardRecord recommendRewardRecord) {
         String code = verifyToken(token);
         //验证失败直接返回
-        if (!StateCode.Initial_Code.equals(code)){
+        if (!StateCode.INITIAL_CODE.equals(code)){
             return code;
         }
         return recommendService.addRecommendRewardRecord(recommendRewardRecord);

@@ -9,9 +9,32 @@
         values (#{order_number},#{aorder_trade_state},#{aorder_total_amount},#{aorder_receipt_amount},#{aorder_invoice_amount},#{aorder_buyer_pay_amount},#{aorder_refund_fee})
     </insert>
     <insert id="insertOrder" parameterType="com.panacealab.panacare.entity.OrderInfo">
-        insert into order_info
+        <!--insert into order_info
         (order_number,goods_uniq_id,user_uniq_id,order_counts,order_state,order_created_time,order_pay_way,order_finished_time)
-        values (#{order_number},#{goods_uniq_id},#{user_uniq_id},#{order_counts},#{order_state},#{order_created_time},#{order_pay_way},#{order_finished_time})
+        values (#{order_number},#{goods_uniq_id},#{user_uniq_id},#{order_counts},#{order_state},#{order_created_time},#{order_pay_way},#{order_finished_time})-->
+        insert into order_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="order_number != null">order_number,</if>
+            <if test="goods_uniq_id != null">goods_uniq_id,</if>
+            <if test="user_uniq_id != null">user_uniq_id,</if>
+            <if test="order_counts != null">order_counts,</if>
+            <if test="order_state != null">order_state,</if>
+            <if test="order_created_time != null">order_created_time,</if>
+            <if test="order_pay_way != null">order_pay_way,</if>
+            <if test="order_finished_time != null">order_finished_time,</if>
+            <if test="order_is_subscribe != null">order_is_subscribe,</if>
+        </trim>
+        <trim prefix="values(" suffix=")" suffixOverrides=",">
+            <if test="order_number != null">#{order_number},</if>
+            <if test="goods_uniq_id != null">#{goods_uniq_id},</if>
+            <if test="user_uniq_id != null">#{user_uniq_id},</if>
+            <if test="order_counts != null">#{order_counts},</if>
+            <if test="order_state != null">#{order_state},</if>
+            <if test="order_created_time != null">#{order_created_time},</if>
+            <if test="order_pay_way != null">#{order_pay_way},</if>
+            <if test="order_finished_time != null">#{order_finished_time},</if>
+            <if test="order_is_subscribe != null">#{order_is_subscribe},</if>
+        </trim>
     </insert>
     <select id="queryGoodsInfo" resultType="com.panacealab.panacare.entity.GoodsInfo">
         select * from goods_info where goods_state = 1 and goods_uniq_id = #{goods_uniq_id}
