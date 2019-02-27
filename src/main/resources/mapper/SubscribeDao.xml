@@ -37,4 +37,12 @@
         <if test="goodsUniqId != null">goods_uniq_id = #{goodsUniqId}</if>
         and 1=1
     </select>
+
+    <select id="queryGoodsInfo" parameterType="String" resultType="com.panacealab.panacare.entity.GoodsInfo">
+        select * from goods_info where goods_state = 1
+        <if test="goods_uniq_id != null"> and </if>
+        <if test="goods_uniq_id != null"> goods_uniq_id = #{goods_uniq_id} </if>
+
+    </select>
+
 </mapper>

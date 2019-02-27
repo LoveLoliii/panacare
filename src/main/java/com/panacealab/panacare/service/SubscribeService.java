@@ -2,13 +2,14 @@ package com.panacealab.panacare.service;
 
 import com.panacealab.panacare.entity.SubscribeInfo;
 
+import java.util.List;
 import java.util.Map;
 
 /**
  * @author loveloliii
  */
 public interface SubscribeService {
-    Map getSubscribeInfoByUid(String user_uniq_id);
+    Map getSubscribeInfoByUid(String userUniqId);
 
     Map getSubscribeInfoAll();
     /**
@@ -27,4 +28,6 @@ public interface SubscribeService {
      * @return int
      */
     int checkRepeatSub(String userUniqId, String goodsUniqId);
+
+    Map getSubscribeInfoForApp(String userUniqId);
 }

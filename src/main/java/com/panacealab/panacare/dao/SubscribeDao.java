@@ -1,8 +1,10 @@
 package com.panacealab.panacare.dao;
 
+import com.panacealab.panacare.entity.GoodsInfo;
 import com.panacealab.panacare.entity.SubscribeInfo;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
@@ -27,4 +29,11 @@ public interface SubscribeDao {
      * @return int 存在数量
      */
     int queryRS(String userUniqId, String goodsUniqId);
+    /**
+     * 通过goos_uniq_id查询goodsinfo
+     * @param goods_uniq_id gud
+     * @return GoodsInfo
+     * 一个参数需要加@param
+     * */
+    GoodsInfo queryGoodsInfo(@Param("goods_uniq_id") String goods_uniq_id);
 }

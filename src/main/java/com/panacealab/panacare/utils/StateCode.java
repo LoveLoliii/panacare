@@ -126,6 +126,10 @@ public class StateCode {
      * 非订阅订单
      * */
     public static final String NO_SUBSCRIBE_ORDER="702";
+    /**
+     * 查询失败
+     * */
+    public static final String DATA_QUERY_FAILED = "671";
 
     /**
      * 交易状态

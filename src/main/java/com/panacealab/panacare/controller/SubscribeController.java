@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -29,25 +30,55 @@ public class SubscribeController {
     /***
      * uid（user_uniq_id）
      *通过uid获取一个用户的订阅信息
-     * @param token token
-     * @param user_uniq_id uuid
+     * @param map token
      * @return 返回订阅信息
-     *token 和用户uid 要分开
      * */
-    @RequestMapping(path = "getSubscribeInfoByUid", method = RequestMethod.POST)
-    private Map getSubscribeInfoByUid(@RequestParam(name = "token", required = false) String token, @RequestParam String user_uniq_id) {
-
-        Map map = new HashMap(2);
-        map.put("state", "000");
-        map.put("data", new ArrayList<>());
-        String code = "000";
-        if (!StateCode.INITIAL_CODE.equals(code)) {
-            map.put("state", code);
-            return map;
+    @RequestMapping(path = "getSubscribeInfo", method = RequestMethod.POST)
+    private Map getSubscribeInfoByUid(@RequestBody Map map) {
+        Map<String, Object> resultMap = new HashMap<>(16);
+        resultMap.put("state", StateCode.INITIAL_CODE);
+        //验证token
+        String token = (String) map.get("token");
+        String rs = TokenUtil.checkLoginState(token);
+        if (!StateCode.INITIAL_CODE.equals(rs)) {
+            resultMap.put("state", rs);
+            return resultMap;
         }
-        //到这里的意思就是map值重新设定。
-        map = subscribeService.getSubscribeInfoByUid(user_uniq_id);
-        return map;
+        String userUniqId = TokenUtil.getTokenValues(token);
+        Map rsMap= subscribeService.getSubscribeInfoByUid(userUniqId);
+        return rsMap;
+    }
+
+    /**
+     * 获取订阅信息用于app显示
+     * @param map token
+     * @return map  返回下批到货时间、种类、价格。  agt type price 放入map  map放入list ，list再放入map
+     * */
+    @RequestMapping(path = "getSubscribeInfoForApp",method = RequestMethod.POST)
+    private Map getSubscribeInfoForApp(@RequestBody Map map){
+        Map<String, Object> resultMap = new HashMap<>(16);
+        resultMap.put("state", StateCode.INITIAL_CODE);
+        //验证token
+        String token = (String) map.get("token");
+        String rs = TokenUtil.checkLoginState(token);
+        if (!StateCode.INITIAL_CODE.equals(rs)) {
+            resultMap.put("state", rs);
+            return resultMap;
+        }
+        String userUniqId = TokenUtil.getTokenValues(token);
+        Map rsMap = subscribeService.getSubscribeInfoForApp(userUniqId);
+        return rsMap;
+    }
+
+    /**
+     * 将订阅状态从订阅中变更为暂停订阅
+     * @param map token goods_uniq_id
+     * @return map
+     * */
+    @RequestMapping(path = "pauseSubscribe",method = RequestMethod.POST)
+    private Map pauseSubscribe(@RequestBody Map map){
+        logger.info("pauseSubscribe:",map.get("goods_uniq_id"));
+        return null;
     }
 
     /***
