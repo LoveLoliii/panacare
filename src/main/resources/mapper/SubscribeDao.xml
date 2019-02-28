@@ -30,8 +30,8 @@
     </insert>
 
     <!--已测试-->
-    <select id="queryRS" parameterType="String" resultType="java.lang.Integer">
-        select count(*) from subscribe_info where
+    <select id="queryRS" parameterType="String" resultType="com.panacealab.panacare.entity.SubscribeInfo">
+        select * from subscribe_info where
         <if test="userUniqId !=null">user_uniq_id = #{userUniqId}</if>
         <if test="goodsUniqId != null">and</if>
         <if test="goodsUniqId != null">goods_uniq_id = #{goodsUniqId}</if>
@@ -45,4 +45,14 @@
 
     </select>
 
+    <update id="updateSub" parameterType="String" >
+        update subscribe_info 
+        <set>
+            <if test="subscribeState != null">
+                subscribe_state = #{subscribeState}
+            </if>
+        </set>
+        where user_uniq_id = #{userUniqId}
+        and   goods_uniq_id = #{goodsUniqId}
+    </update>
 </mapper>

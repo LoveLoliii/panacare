@@ -45,17 +45,18 @@ public class SubscribeController {
             return resultMap;
         }
         String userUniqId = TokenUtil.getTokenValues(token);
-        Map rsMap= subscribeService.getSubscribeInfoByUid(userUniqId);
+        Map rsMap = subscribeService.getSubscribeInfoByUid(userUniqId);
         return rsMap;
     }
 
     /**
      * 获取订阅信息用于app显示
+     *
      * @param map token
      * @return map  返回下批到货时间、种类、价格。  agt type price 放入map  map放入list ，list再放入map
-     * */
-    @RequestMapping(path = "getSubscribeInfoForApp",method = RequestMethod.POST)
-    private Map getSubscribeInfoForApp(@RequestBody Map map){
+     */
+    @RequestMapping(path = "getSubscribeInfoForApp", method = RequestMethod.POST)
+    private Map getSubscribeInfoForApp(@RequestBody Map map) {
         Map<String, Object> resultMap = new HashMap<>(16);
         resultMap.put("state", StateCode.INITIAL_CODE);
         //验证token
@@ -72,13 +73,55 @@ public class SubscribeController {
 
     /**
      * 将订阅状态从订阅中变更为暂停订阅
+     *
      * @param map token goods_uniq_id
      * @return map
+     */
+    @RequestMapping(path = "pauseSubscribe", method = RequestMethod.POST)
+    private Map pauseSubscribe(@RequestBody Map map) {
+        logger.info("pauseSubscribe:", map.get("goods_uniq_id"));
+        Map<String, Object> resultMap = new HashMap<>(16);
+        resultMap.put("state", StateCode.INITIAL_CODE);
+        //验证token
+        String token = (String) map.get("token");
+        String rsT = TokenUtil.checkLoginState(token);
+        if (!StateCode.INITIAL_CODE.equals(rsT)) {
+            resultMap.put("state", rsT);
+            return resultMap;
+        }
+        String userUniqId = TokenUtil.getTokenValues(token);
+        String goodsUniqId = String.valueOf(map.get("goods_uniq_id"));
+        int rs = subscribeService.pauseSub(userUniqId, goodsUniqId);
+
+        resultMap.put("state", rs == 0 ? "1" : "1303");
+
+        return resultMap;
+    }
+
+    /**
+     * 将订阅状态从订阅中SING更新到曾订阅QS
+     * @param map token  goos_uniq_id
+     * @return map state 1303 error code
      * */
-    @RequestMapping(path = "pauseSubscribe",method = RequestMethod.POST)
-    private Map pauseSubscribe(@RequestBody Map map){
-        logger.info("pauseSubscribe:",map.get("goods_uniq_id"));
-        return null;
+    @RequestMapping(path = "cancelSubscribe",method = RequestMethod.POST)
+    private Map cancelSubscribe(@RequestBody Map map){
+        logger.info("cancelSubscribe:", map.get("goods_uniq_id"));
+        Map<String, Object> resultMap = new HashMap<>(16);
+        resultMap.put("state", StateCode.INITIAL_CODE);
+        //验证token
+        String token = (String) map.get("token");
+        String rsT = TokenUtil.checkLoginState(token);
+        if (!StateCode.INITIAL_CODE.equals(rsT)) {
+            resultMap.put("state", rsT);
+            return resultMap;
+        }
+        String userUniqId = TokenUtil.getTokenValues(token);
+        String goodsUniqId = String.valueOf(map.get("goods_uniq_id"));
+        int rs = subscribeService.cancelSub(userUniqId, goodsUniqId);
+
+        resultMap.put("state", rs == 0 ? "1" : "1303");
+
+        return resultMap;
     }
 
     /***
@@ -104,7 +147,8 @@ public class SubscribeController {
     }
 
     /**
-     *添加订阅信息
+     * 添加订阅信息
+     *
      * @param map token orderInfo
      * @return map
      */
@@ -127,17 +171,25 @@ public class SubscribeController {
         //防止非订阅订单
         if (0 == orderInfo.getOrder_is_subscribe()) {
             resultMap.put("state", StateCode.NO_SUBSCRIBE_ORDER);
-        }else {
+        } else {
             //构建订阅信息
             SubscribeInfo subscribeInfo = new SubscribeInfo();
             subscribeInfo.setUser_uniq_id(orderInfo.getUser_uniq_id());
             subscribeInfo.setGoods_uniq_id(orderInfo.getGoods_uniq_id());
             subscribeInfo.setSubscribe_state(StateCode.SubscribeState.SING.name());
-            String state = subscribeService.addSubscribeInfo(subscribeInfo);
+            //查询是否存在暂停订阅或曾经订阅 存在则将insert操作改为update操作
+            String stateS = subscribeService.checkRepeatSub(orderInfo.getUser_uniq_id(), orderInfo.getGoods_uniq_id());
+            String state;
+            if (!stateS.equals(StateCode.DATA_NOT_REPEAT)) {
+
+                state = subscribeService.updateSubscribeInfo(subscribeInfo);
+            } else {
+                state = subscribeService.addSubscribeInfo(subscribeInfo);
+            }
             if (StateCode.DATABASE_INSERT_ERROR.equals(state)) {
                 resultMap.put("state", StateCode.DATABASE_INSERT_ERROR);
             } else {
-                    resultMap.put("state", StateCode.DATA_RETURN_SUCCESS);
+                resultMap.put("state", StateCode.DATA_RETURN_SUCCESS);
             }
         }
 
@@ -173,13 +225,14 @@ public class SubscribeController {
 
 
     /**
-     *  检查订阅是否重复
+     * 检查订阅是否重复
+     *
      * @param map token orderInfo
-     * @return map
+     * @return map 存在暂停的订单返回A 不存在B 存在正在订阅的订单C 存在曾经订阅的订单D
      * @date 2019/02/26
-     * */
-    @RequestMapping(path = "checkRepeatSubscribe",method = RequestMethod.POST)
-    private Map checkRepeatSubscriber(@RequestBody Map map){
+     */
+    @RequestMapping(path = "checkRepeatSubscribe", method = RequestMethod.POST)
+    private Map checkRepeatSubscriber(@RequestBody Map map) {
         logger.info("进入checkRepeatSubscriber方法：");
         Map<String, Object> resultMap = new HashMap<>(2);
         resultMap.put("state", StateCode.INITIAL_CODE);
@@ -193,9 +246,9 @@ public class SubscribeController {
         String userUniqId = String.valueOf(map.get("user_uniq_id"));
         String goodsUniqId = String.valueOf(map.get("goods_uniq_id"));
         // 为了方便可读 将将查询结果返回此处处理
-        int count = subscribeService.checkRepeatSub(userUniqId,goodsUniqId);
-        logger.info("查询的count值为{}",count);
-        resultMap.put("state",count==0?StateCode.DATA_NOT_REPEAT :StateCode.DATA_IS_REPEAT);
+        String state = subscribeService.checkRepeatSub(userUniqId, goodsUniqId);
+        logger.info("查询的状态值为{}", state);
+        resultMap.put("state", state);
         return resultMap;
     }
 }

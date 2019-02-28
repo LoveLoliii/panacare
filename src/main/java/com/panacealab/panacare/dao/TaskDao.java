@@ -6,8 +6,15 @@ import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
+/**
+ * @author Loveloliii
+ */
 @Mapper
 public interface TaskDao {
+    /**
+     * 从数据库查询任务信息
+     * @return List<TaskInfo>
+     * */
     List<TaskInfo> queryAll();
 
     /***

@@ -1,5 +1,8 @@
 package com.panacealab.panacare.entity;
 
+/**
+ * @author Loveloliii
+ */
 public class TaskInfo {
 
 

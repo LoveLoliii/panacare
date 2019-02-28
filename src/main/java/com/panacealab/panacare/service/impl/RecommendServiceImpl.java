@@ -59,7 +59,7 @@ public class RecommendServiceImpl implements RecommendService {
         Map<String, Object> map = new HashMap<>(16);
         List<RecommendReward> rewardList = recommendDao.queryRecommendReward();
         map.put("data",rewardList);
-        map.put("state","1303");
+        map.put("state",StateCode.DATA_RETURN_SUCCESS);
         return map;
     }
 

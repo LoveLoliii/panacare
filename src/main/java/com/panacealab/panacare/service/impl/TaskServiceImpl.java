@@ -4,6 +4,7 @@ import com.panacealab.panacare.dao.TaskDao;
 import com.panacealab.panacare.entity.TaskInfo;
 import com.panacealab.panacare.entity.UserInfo;
 import com.panacealab.panacare.service.TaskService;
+import com.panacealab.panacare.utils.StateCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,6 +12,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * @author Loveloliii
+ */
 @Service
 public class TaskServiceImpl implements TaskService {
     @Autowired
@@ -18,9 +22,9 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public Map getTaskInfo() {
-        Map rsMap = new HashMap();
+        Map rsMap = new HashMap(16);
         List<TaskInfo> taskInfoList = taskDao.queryAll();
-        rsMap.put("state", "455");
+        rsMap.put("state", StateCode.DATA_RETURN_SUCCESS);
         rsMap.put("data", taskInfoList);
         return rsMap;
     }

@@ -3,12 +3,11 @@ package com.panacealab.panacare.controller;
 import com.panacealab.panacare.entity.TaskInfo;
 import com.panacealab.panacare.service.IRedisService;
 import com.panacealab.panacare.service.TaskService;
+import com.panacealab.panacare.utils.PUtils;
+import com.panacealab.panacare.utils.StateCode;
 import com.panacealab.panacare.utils.TokenUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,41 +18,20 @@ import java.util.Map;
 public class TaskController {
     @Autowired
     private TaskService taskService;
-    @Autowired
-    private IRedisService iRedisService;
 
     @RequestMapping(path = "getTaskInfo", method = RequestMethod.POST)
-    private Map getTaskInfo(@RequestParam(value = "token", required = false) String token) {
-        String state = "000";
-        Map map = new HashMap(16);
-        List rs = new ArrayList();
-        if (null == token || "".equals(token)) {
-            state = "554";
-            map.put("state",state);
-        } else if (!TokenUtil.verifyToken(token)) {
-            state = "555";
-            map.put("state",state);
-        } else {
-            //验证token唯一性
-            //获取用户uniq_id
-            String user_uniq_id = TokenUtil.getTokenValues(token);
-            //查询redis使用存在该用户
-            if (!iRedisService.isKeyExists(user_uniq_id)) {
-                //不存在用户token
-                state = "556";
-                map.put("state",state);
-             }
-            //存在token 进行对比
-            else if (!token.equals(iRedisService.get(user_uniq_id))){
-                //token 不相同 验证不通过
-                state = "557";
-                map.put("state",state);
-            }else {
-                //验证token完毕 登陆成功 获取task任务信息 ...获取任务信息好像不需要token
-               map = taskService.getTaskInfo();
-            }
+    private Map getTaskInfo(@RequestBody Map map) {
+        Map<String, Object> resultMap = new HashMap<>(16);
+        resultMap.put("state", StateCode.INITIAL_CODE);
+        //验证token
+        String token = (String) map.get("token");
+        String rs = TokenUtil.checkLoginState(token);
+        if (!StateCode.INITIAL_CODE.equals(rs)) {
+            resultMap.put("state", rs);
+            return resultMap;
         }
-        return map;
+        String userUniqId = TokenUtil.getTokenValues(token);
+        return  taskService.getTaskInfo();
     }
 
 

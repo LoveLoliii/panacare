@@ -10,10 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
 /**
  * @author Loveloliii
  */
@@ -70,6 +68,27 @@ public class SubscribeServiceImpl implements SubscribeService {
         map.put("data",fsList);
         return map;
     }
+
+    @Override
+    public int pauseSub(String userUniqId, String goodsUniqId) {
+        String subscribeState = StateCode.SubscribeState.PS.name();
+        int rs = subscribeDao.updateSub(userUniqId,goodsUniqId,subscribeState);
+        return rs;
+    }
+
+    @Override
+    public String updateSubscribeInfo(SubscribeInfo subscribeInfo) {
+        int rs = subscribeDao.updateSub(subscribeInfo.getUser_uniq_id(),subscribeInfo.getGoods_uniq_id(),subscribeInfo.getSubscribe_state());
+        return rs==0? StateCode.DATABASE_INSERT_ERROR :StateCode.DATA_RETURN_SUCCESS;
+    }
+
+    @Override
+    public int cancelSub(String userUniqId, String goodsUniqId) {
+        String subscribeState = StateCode.SubscribeState.QS.name();
+        int rs = subscribeDao.updateSub(userUniqId,goodsUniqId,subscribeState);
+        return rs;
+    }
+
     @Override
     public Map getSubscribeInfoAll() {
         Map map = new HashMap();
@@ -107,8 +126,14 @@ public class SubscribeServiceImpl implements SubscribeService {
     }
 
     @Override
-    public int checkRepeatSub(String userUniqId, String goodsUniqId) {
-        int rs = subscribeDao.queryRS(userUniqId,goodsUniqId);
+    public String checkRepeatSub(String userUniqId, String goodsUniqId) {
+        String rs ;
+        SubscribeInfo s = subscribeDao.queryRS(userUniqId,goodsUniqId);
+        if(Objects.isNull(s)){
+            rs = StateCode.DATA_NOT_REPEAT;
+        }else {
+            rs = s.getSubscribe_state();
+        }
         return rs;
     }
 

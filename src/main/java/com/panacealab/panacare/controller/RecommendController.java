@@ -123,12 +123,18 @@ public class RecommendController {
      *
      * */
     @RequestMapping(path = "getRecommendRewardInfo", method = RequestMethod.POST)
-    private Map getRecommendRewardInfo() {
-        Map<String,Object> resultMap = new HashMap<>(16);
-        resultMap.put("state", "000");
-        resultMap.put("data", new ArrayList<>());
-        resultMap = recommendService.getRecommendRewardInfo();
-        return resultMap;
+    private Map getRecommendRewardInfo(@RequestBody Map map) {
+        Map<String, Object> resultMap = new HashMap<>(16);
+        resultMap.put("state", StateCode.INITIAL_CODE);
+        //验证token
+        String token = (String) map.get("token");
+        String rs = TokenUtil.checkLoginState(token);
+        if (!StateCode.INITIAL_CODE.equals(rs)) {
+            resultMap.put("state", rs);
+            return resultMap;
+        }
+        String userUniqId = TokenUtil.getTokenValues(token);
+        return recommendService.getRecommendRewardInfo();
     }
 
 
