@@ -132,6 +132,10 @@ public class StateCode {
      * 查询失败
      * */
     public static final String DATA_QUERY_FAILED = "671";
+    /**
+     * 数据未改变
+     * */
+    public static final String DATA_NOT_CHANGE = "703";
 
     /**
      * 交易状态

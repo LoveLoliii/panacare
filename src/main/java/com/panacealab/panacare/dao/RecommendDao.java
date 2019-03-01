@@ -4,10 +4,7 @@ import com.panacealab.panacare.entity.RecommendInfo;
 import com.panacealab.panacare.entity.RecommendReward;
 import com.panacealab.panacare.entity.RecommendRewardRecord;
 import com.panacealab.panacare.entity.UserInfo;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -43,4 +40,13 @@ public interface RecommendDao {
     int queryRecommendRewardIdByCount(int c);
     @Select("SELECT COUNT(*) FROM recommend_reward_record WHERE user_uniq_id =#{user_uniq_id} and recommend_reward_id = #{recommend_reward_id} ")
     int queryRecommendRewardRecordByRI(String user_uniq_id, int recommend_reward_id);
+
+    /**
+     * 将state从1改为0
+     * @param userUniqId uud
+     * @param recommendRewardRecordId rrid
+     * @param state state
+     * @return int
+     */
+    int updateState(@Param("userUniqId") String userUniqId, @Param("recommendRewardRecordId") String recommendRewardRecordId,@Param("state") Integer state);
 }

@@ -23,4 +23,8 @@
         </set>
 
     </insert>
+    <update id="updateState">
+        update recommend_reward_record set recommend_reward_record_getstate = #{state}
+        where recommend_reward_record_id = #{recommendRewardRecordId} and user_uniq_id = #{userUniqId}
+    </update>
 </mapper>

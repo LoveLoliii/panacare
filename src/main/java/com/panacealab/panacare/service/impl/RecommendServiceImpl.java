@@ -39,7 +39,7 @@ public class RecommendServiceImpl implements RecommendService {
             List<RecommendReward> countList = recommendDao.queryRecommendReward();
             //未测试
             for(RecommendReward r:countList){
-                    int c = r.getRecommend_reward_mount();
+                    int c = r.getRecommend_reward_count();
                 if(count>= c){
                     int recommend_reward_id = recommendDao.queryRecommendRewardIdByCount(c);
                     RecommendRewardRecord recommendRewardRecord = new RecommendRewardRecord();
@@ -65,10 +65,10 @@ public class RecommendServiceImpl implements RecommendService {
 
     @Override
     public Map getRecommendRewardRecord(String user_uniq_id) {
-        Map<String, Object> map = new HashMap<>(16);
+        Map<String, Object> map = new HashMap<>(2);
         List<RecommendRewardRecord> recordList = recommendDao.queryRecommendRewardRecord(user_uniq_id);
         map.put("data",recordList);
-        map.put("state","1303");
+        map.put("state",StateCode.DATA_RETURN_SUCCESS);
         return map;
     }
 
@@ -124,6 +124,12 @@ public class RecommendServiceImpl implements RecommendService {
         map.put("data",count);
         map.put("state","1303");
         return map;
+    }
+
+    @Override
+    public int applyReward(String userUniqId, String recommendRewardRecordId) {
+        int rs = recommendDao.updateState(userUniqId,recommendRewardRecordId,0);
+        return rs;
     }
 
 

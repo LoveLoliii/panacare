@@ -137,7 +137,32 @@ public class RecommendController {
         return recommendService.getRecommendRewardInfo();
     }
 
-
+    /**
+     * 申请奖励
+     * @param map token record id
+     * @return map
+     * */
+    @RequestMapping(path = "applyReward",method = RequestMethod.POST)
+    private Map applyReward(@RequestBody Map map){
+        Map<String, Object> resultMap = new HashMap<>(16);
+        resultMap.put("state", StateCode.INITIAL_CODE);
+        //验证token
+        String token = (String) map.get("token");
+        String rs = TokenUtil.checkLoginState(token);
+        if (!StateCode.INITIAL_CODE.equals(rs)) {
+            resultMap.put("state", rs);
+            return resultMap;
+        }
+        String recommendRewardRecordId = String.valueOf(map.get("recommend_reward_record_id"));
+        String userUniqId = TokenUtil.getTokenValues(token);
+        int rsUpdate = recommendService.applyReward(userUniqId,recommendRewardRecordId);
+        if(1==rsUpdate){
+            resultMap.put("state",StateCode.DATA_RETURN_SUCCESS);
+        }else {
+            resultMap.put("state",StateCode.DATA_NOT_CHANGE);
+        }
+        return resultMap;
+    }
     /**
      * 获取邀请人数
      * */

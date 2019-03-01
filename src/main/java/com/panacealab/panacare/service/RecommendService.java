@@ -4,9 +4,17 @@ import com.panacealab.panacare.entity.RecommendRewardRecord;
 
 import java.util.Map;
 
+/**
+ * @author Loveloliii
+ */
 public interface RecommendService {
     String addRecommendInfo(String user_uniq_id, String user_referee);
 
+
+    /**
+     * 获取奖励内容
+     * @return Map
+     */
     Map getRecommendRewardInfo();
 
     /**
@@ -27,4 +35,11 @@ public interface RecommendService {
     Map getUserReferee(String user_uniq_id);
     Map getRecommendRewardCount(String user_uniq_id);
 
+    /**
+     * 改变奖励领取状态 从未领取改为领取
+     * @param userUniqId uud
+     * @param recommendRewardRecordId rri
+     * @return int
+     */
+    int applyReward(String userUniqId, String recommendRewardRecordId);
 }
