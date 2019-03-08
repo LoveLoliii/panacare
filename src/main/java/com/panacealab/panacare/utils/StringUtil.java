@@ -20,6 +20,12 @@ static Logger logger = LoggerFactory.getLogger(StringUtil.class.getName());
     }
 
     public static void main(String[] args) {
+                for (int i =0;i<999;i++){
+                    System.out.println("<item>"+i+"</item>");
+                }
+
+
+
 
         List<String> l = new ArrayList<String>();
        for(int i=0;i<20;i++){
@@ -71,5 +77,13 @@ static Logger logger = LoggerFactory.getLogger(StringUtil.class.getName());
         int uuidHash =UUID.randomUUID().toString().hashCode();
         sb.append(String.format("%011d",Math.abs(uuidHash)));
         return sb.toString();
+    }
+
+    public static String userRefereeCode(){
+        //推荐码 10000000
+        
+
+
+        return null;
     }
 }

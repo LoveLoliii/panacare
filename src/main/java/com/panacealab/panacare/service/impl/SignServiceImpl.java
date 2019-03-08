@@ -8,6 +8,7 @@ import com.panacealab.panacare.entity.UserInfo;
 import com.panacealab.panacare.service.SignService;
 import com.panacealab.panacare.utils.MailSendUtil;
 import com.panacealab.panacare.utils.MailTool;
+import com.panacealab.panacare.utils.StateCode;
 import com.panacealab.panacare.utils.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,9 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 
 @Service
@@ -28,13 +27,20 @@ public class SignServiceImpl implements SignService {
     @Autowired
     private LoginDao loginDao;
 
+    /**
+     * 返回验证码
+     * @param mail 注册邮箱
+     * @return Map
+     */
     @Override
-    public String getVerificationCode(String mail) {
+    public Map getVerificationCode(String mail) {
+        Map map = new HashMap(2);
         String code = "123456";
         String rs = "";
         //检查邮箱是否已注册
         List userList = loginDao.query("",mail);
         if(userList.size()>0){
+            map.put("state", StateCode.MAIL_EXIST);
         }else{
             //检查数据库中是否存在未过期的可用的验证码
             List result = signDao.query("mail_validate_mail", mail);
@@ -116,12 +122,10 @@ public class SignServiceImpl implements SignService {
                     "</body>\n" +
                     "</html>");
             MailSendUtil.sendHtmlMail(mailInfo);
-            rs = "success";
-            return rs;
+            map.put("state",StateCode.DATA_RETURN_SUCCESS);
         }
-            logger.info("用户邮箱已存在,{}",mail);
-            rs = "用户邮箱已存在";
-        return rs;
+          logger.info(map.toString());
+        return map;
 
     }
 
@@ -149,20 +153,20 @@ public class SignServiceImpl implements SignService {
                     //改变状态 返回成功信息
                     //TODO change state
                     signDao.update(0,mail);
-                    rs = "542";
+                    rs = StateCode.MAIL_VERITY_SUCCESS;
                     return rs;
                 } else {
                     logger.info("验证码过期");
-                    rs = "545";
+                    rs = StateCode.VERITY_CODE_EXPIRE;
                     return rs;
                 }
             }else{
-                rs = "544";
+                rs = StateCode.VERITY_CODE_ERROR;
                 return rs;
             }
         }  else {
             logger.info("未查询到数据库内有记录。");
-            rs = "543";
+            rs = StateCode.VERITY_CODE_ERROR;
             return rs;
         }
 
@@ -174,12 +178,12 @@ public class SignServiceImpl implements SignService {
         //检查邮箱是否已经被注册
         List<UserInfo> availableRs = signDao.checkMailAvailable(mail);
         if(availableRs.size()>0){
-            return "548";
+            return StateCode.MAIL_EXIST;
         }
 
         //验证邮箱
         String rs = verifyMail(mail,code);
-        if("542".equals(rs)){
+        if(StateCode.MAIL_VERITY_SUCCESS.equals(rs)){
             //验证成功 写入用户信息到数据库
             //mybatis 存储 entity
             //mybatis 不能重载
@@ -188,12 +192,12 @@ public class SignServiceImpl implements SignService {
                 u.setUser_uniq_id(StringUtil.getUUID());
                 int irs = signDao.insertUser(u);
                 logger.info("insertUser的返回结果是：" + irs);
-                rs = "547";
+                rs = StateCode.SIGN_UP_SUCCESS;
             }catch (Exception e){
                 e.printStackTrace();
                 logger.error("注册数据库错误：{}",e.getMessage());
                 //无法catch
-                rs="546";
+                rs=StateCode.SIGN_UP_ERROR_DB;
             }
 
         }

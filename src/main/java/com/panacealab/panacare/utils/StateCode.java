@@ -136,6 +136,14 @@ public class StateCode {
      * 数据未改变
      * */
     public static final String DATA_NOT_CHANGE = "703";
+    public static final String LOGIN_SUCCESS_WITH_PWD = "560";
+    public static final String MAIL_EXIST = "548";
+    public static final String MAIL_VERITY_SUCCESS = "542";
+    public static final String SIGN_UP_SUCCESS = "547";
+    public static final String SIGN_UP_ERROR_DB = "546";
+    public static final String VERITY_CODE_EXPIRE = "545";
+    public static final String VERITY_CODE_ERROR = "544";
+
 
     /**
      * 交易状态

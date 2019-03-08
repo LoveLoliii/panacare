@@ -16,6 +16,9 @@ import java.io.IOException;
 import java.util.*;
 import java.util.logging.Logger;
 
+/**
+ * @author Loveloliii
+ */
 @PropertySource(value= {"classpath:configure.properties"})
 @Service
 public class LoginServiceImpl implements LoginService {
@@ -31,21 +34,20 @@ public class LoginServiceImpl implements LoginService {
     public Map check(String account, String pwd) {
         //默认邮箱 有需求再做处理
         List rs = loginDao.query("mail",account);
-
-        String state = StateCode.JWT_C_EXCEPTION; //"552";//0表示失败
-        Map<String,String> resultMap = new HashMap<>();
+        //"552";//0表示失败
+        String state = StateCode.JWT_C_EXCEPTION;
+        Map<String,String> resultMap = new HashMap<>(2);
 
         if(rs.size()>0){
             UserInfo userInfo = (UserInfo) rs.get(0);
-            //System.out.println(((UserInfo)rs.get(0)).getUser_mail());
             if(userInfo.getUser_pwd().equals(pwd)){
                 //返回验证信息与token
-                resultMap.put("state",StateCode.LOGIN_SUCCESS_WITH_TOKEN);//"553"
+                resultMap.put("state",StateCode.LOGIN_SUCCESS_WITH_PWD);
                 //put token
                 try {
                     String token =TokenUtil.createToken(userInfo);
                     resultMap.put("token",token);
-                    state =StateCode.LOGIN_SUCCESS_WITH_TOKEN;
+                    state =StateCode.LOGIN_SUCCESS_WITH_PWD;
                     //更新redis数据
                     //删除与用户uniq_id相同的key
                     iRedisService.remove(userInfo.getUser_uniq_id());

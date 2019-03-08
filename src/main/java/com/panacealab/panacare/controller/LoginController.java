@@ -22,7 +22,7 @@ private final static Logger logger= LoggerFactory.getLogger("LoginController") ;
     @Autowired
     private LoginService loginService;
     /***
-     * @author:loveloliii
+     * @author loveloliii
      * @param   map account 邮箱 或者是 手机号  pwd 密码
      * @return  rsmap 登陆结果与token
      * */

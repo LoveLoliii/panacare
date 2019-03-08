@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * @author Loveloliii
+ */
 @RestController
 public class RecommendController {
 
@@ -26,8 +29,6 @@ public class RecommendController {
 
     /***
      * token验证方法
-     *
-     *
      * */
     private String verifyToken(String token) {
         String user_uniq_id;
