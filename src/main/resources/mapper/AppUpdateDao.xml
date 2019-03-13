@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panacealab.panacare.dao.AppUpdateDao">
+    <select id="queryVersion" resultType="com.panacealab.panacare.entity.VersionInfo">
+        select * from p_version where
+        product = #{product}
+        and platform = #{platform}
+        and channel = #{channel}
+    </select>
+
+    <insert id="insertVersion" parameterType="com.panacealab.panacare.entity.VersionInfo" >
+        insert into p_version (product,platform,versioncode,versionname,channel,update_log)
+        values(#{product},#{platform},#{versioncode},#{versionname},#{channel},#{updateLog})
+    </insert>
+
+    <!-- fixme  1. 是否需要加逗号？2.如果需要加逗号是否需要处理逗号后缀的问题-->
+    <update id="updateVersion" parameterType="com.panacealab.panacare.entity.VersionInfo">
+        update p_version
+        <set>
+
+
+            <if test="versioncode != null">versioncode = #{versioncode}, </if>
+            <if test="versionname != null">versionname = #{versionname}, </if>
+
+            <if test="updateLog != null">update_log = #{updateLog} </if>
+        </set>
+        where <if test="product != null">product = #{product} and </if>
+        <if test="platform != null">platform = #{platform} and </if>
+        <if test="channel != null">channel = #{channel} and </if>
+         1=1
+    </update>
+</mapper>

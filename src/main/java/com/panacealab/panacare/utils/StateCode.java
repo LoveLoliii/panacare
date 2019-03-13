@@ -143,6 +143,7 @@ public class StateCode {
     public static final String SIGN_UP_ERROR_DB = "546";
     public static final String VERITY_CODE_EXPIRE = "545";
     public static final String VERITY_CODE_ERROR = "544";
+    public static final String UPLOAD_FAILED = "561";
 
 
     /**
