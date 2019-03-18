@@ -105,7 +105,7 @@ public class AppUpdateController {
             File rootPath = new File(ResourceUtils.getURL("classpath:").getPath());
             String path = p.getProperty("panacare.update.path");
             log.debug(path);
-            File file = new File(rootPath.getAbsolutePath() + path + "app.apk");
+            File file = new File(rootPath.getAbsolutePath() + path + "app-release.apk");
             response.addHeader("Content-Length", "" + file.length());
             //输入流：本地文件路径
             inputStream = new FileInputStream(file);
