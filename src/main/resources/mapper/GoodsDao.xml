@@ -4,6 +4,50 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.panacealab.panacare.dao.GoodsDao">
     <select id="queryAll" resultType="com.panacealab.panacare.entity.GoodsInfo">
-        select * from goods_info where goods_state = 1
+        select * from goods_info
     </select>
+    <update id="update" parameterType="com.panacealab.panacare.entity.GoodsInfo">
+    update goods_info
+    <set>
+        <if test="goods_name != null">goods_name=#{goods_name},</if>
+        <if test="goods_subscribe_uprice != null">goods_subscribe_uprice=#{goods_subscribe_uprice},</if>
+        <if test="goods_onsale_subscribe_uprice != null">goods_onsale_subscribe_uprice=#{goods_onsale_subscribe_uprice},</if>
+        <if test="goods_buy_uprice != null">goods_buy_uprice=#{goods_buy_uprice},</if>
+        <if test="goods_onsale_buy_uprice != null">goods_onsale_buy_uprice=#{goods_onsale_buy_uprice},</if>
+        <if test="goods_palate != null">goods_palate=#{goods_palate},</if>
+        <if test="goods_palate_description != null">goods_palate_description=#{goods_palate_description},</if>
+        <if test="goods_type != null">goods_type=#{goods_type},</if>
+        <if test="goods_type_description != null">goods_type_description=#{goods_type_description},</if>
+        <if test="goods_description != null">goods_description=#{goods_description},</if>
+        <if test="goods_stock != null">goods_stock=#{goods_stock},</if>
+        <if test="goods_state != null">goods_state=#{goods_state},</if>
+        <if test="goods_reserved != null">goods_reserved=#{goods_reserved},</if>
+    </set>
+    where goods_id=#{goods_id} and goods_uniq_id = #{goods_uniq_id}
+    </update>
+
+
+    <insert id="insert" parameterType="com.panacealab.panacare.entity.GoodsInfo">
+        <!--insert into repair_info (user_uniq_id,repair_problem_description,repair_file_id,repair_create_time,
+         repair_handling_state)values(#{user_uniq_id},#{repair_problem_description},#{repair_file_name},#{repair_create_time},"未处理")
+        -->
+        insert into goods_info
+        <set>
+            <if test="goods_uniq_id != null">goods_uniq_id = #{goods_uniq_id},</if>
+            <if test="goods_name != null">goods_name = #{goods_name},</if>
+            <if test="goods_subscribe_uprice != null">goods_subscribe_uprice=#{goods_subscribe_uprice},</if>
+            <if test="goods_onsale_subscribe_uprice != null">goods_onsale_subscribe_uprice=#{goods_onsale_subscribe_uprice},</if>
+            <if test="goods_buy_uprice != null">goods_buy_uprice=#{goods_buy_uprice},</if>
+            <if test="goods_onsale_buy_uprice != null">goods_onsale_buy_uprice=#{goods_onsale_buy_uprice},</if>
+            <if test="goods_palate != null">goods_palate=#{goods_palate},</if>
+            <if test="goods_palate_description != null">goods_palate_description=#{goods_palate_description},</if>
+            <if test="goods_type != null">goods_type=#{goods_type},</if>
+            <if test="goods_type_description != null">goods_type_description=#{goods_type_description},</if>
+            <if test="goods_description != null">goods_description=#{goods_description},</if>
+            <if test="goods_stock != null">goods_stock=#{goods_stock},</if>
+            <if test="goods_state != null">goods_state=#{goods_state},</if>
+            <if test="goods_reserved != null">goods_reserved=#{goods_reserved},</if>
+        </set>
+    </insert>
+
 </mapper>

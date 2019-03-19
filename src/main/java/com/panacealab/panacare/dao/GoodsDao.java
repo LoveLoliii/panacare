@@ -6,6 +6,9 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+/**
+ * @author Loveloliii
+ */
 @Mapper
 public interface GoodsDao {
 
@@ -19,6 +22,12 @@ public interface GoodsDao {
      * @param goodsInfo 商品信息
      * @return int 插入的条数
      * */
-    @Insert("INSERT INTO goods_info")
     int insert(GoodsInfo goodsInfo);
+
+    /**
+     * 更新商品
+     * @param goodsInfo 商品信息
+     * @return
+     */
+    int update(GoodsInfo goodsInfo);
 }

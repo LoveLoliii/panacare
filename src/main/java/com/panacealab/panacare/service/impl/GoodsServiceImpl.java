@@ -33,4 +33,12 @@ public class GoodsServiceImpl implements GoodsService {
         int rs = goodsDao.insert(goodsInfo);
         return rs==0?"":"";
     }
+
+    @Override
+    public int updateGoodsInfo(GoodsInfo goodsInfo) {
+
+        int rs = goodsDao.update(goodsInfo);
+
+        return rs;
+    }
 }

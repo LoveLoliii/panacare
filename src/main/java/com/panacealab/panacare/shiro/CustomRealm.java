@@ -12,7 +12,7 @@ import org.apache.shiro.subject.PrincipalCollection;*/
  * @description 自定义 realm
  * @date 2019/3/18.
  */
-public class CustomRealm /*extends AuthorizingRealm*/ {
+public class CustomRealm /*extends AuthorizingRealm */ {
 
    /* @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
