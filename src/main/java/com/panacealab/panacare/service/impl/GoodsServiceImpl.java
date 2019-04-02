@@ -31,7 +31,7 @@ public class GoodsServiceImpl implements GoodsService {
     public String addGoodsInfo(GoodsInfo goodsInfo) {
 
         int rs = goodsDao.insert(goodsInfo);
-        return rs==0?"":"";
+        return rs==1?StateCode.DATA_RETURN_SUCCESS:StateCode.DATA_NOT_CHANGE;
     }
 
     @Override

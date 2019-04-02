@@ -57,10 +57,25 @@ public class PUtils {
     }
 
     public static void main(String[] args) {
-        for (int i=0;i<100;i++
+      /*  for (int i=0;i<100;i++
              ) {
             bigDecimalTest();
+        }*/
+        //System.out.println(3|9);
+
+        int[] nums = new int[]{234,345,444,3344,1,50,4567,8954};
+        for (int x: nums){
+            new Thread(()->{
+                try {
+                    Thread.sleep(x);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(x);
+            }).start();
         }
+
+
 
     }
 }

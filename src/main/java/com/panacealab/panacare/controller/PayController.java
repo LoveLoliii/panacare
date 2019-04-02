@@ -209,7 +209,7 @@ public class PayController {
         //处理订单信息
         //客户端应该传来的信息  goods_uniq_id order_counts order_created_time order_pay_way  user_uniq_id order_state   由数据库生成的信息->order_id  由服务端生成的信息->order_number
         OrderInfo orderInfo = g.fromJson(String.valueOf(map.get("orderInfo")).trim(), OrderInfo.class);
-        //1秒内(10/270000的重复率)
+        //1秒内(1/27000的重复率)
         orderInfo.setOrder_number(StringUtil.getOrderNumber());
         logger.info("支付宝下单,商户订单号为：" + orderInfo.getOrder_number());
         orderInfo.setOrder_state(StateCode.TradeState.PENDING_PAYMENT.name());
@@ -252,9 +252,7 @@ public class PayController {
             String e = PropertyUtil.t("A.aliPublicKey");
             String f = PropertyUtil.t("A.signType");
             System.out.println(a + b + c + d + e + f);
-            AlipayClient alipayClient = new DefaultAlipayClient(a, b,
-                    c, "JSON", d,
-                    e, f);
+            AlipayClient alipayClient = new DefaultAlipayClient(a, b,c,"JSON", d,e, f);
             //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
             AlipayTradeAppPayRequest ali_request = new AlipayTradeAppPayRequest();
             //SDK已经封装掉了公共参数，这里只需要传入业务参数。以下方法为sdk的model入参方式

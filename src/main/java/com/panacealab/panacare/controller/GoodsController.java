@@ -30,7 +30,8 @@ public class GoodsController {
      * @autho loveloliii
      * */
     @CrossOrigin
-    @RequestMapping(path = "getAllGoodsInfo",method = RequestMethod.POST)
+    //@RequestMapping(path = "getAllGoodsInfo",method = RequestMethod.POST)
+    @PostMapping("getAllGoodsInfo")
     private Map getAllGoodsInfo(){
         Map rs;
         rs = goodsService.getAllGoodsInfo();
@@ -43,7 +44,8 @@ public class GoodsController {
      *
      * */
     @CrossOrigin
-    @RequestMapping(path = "addGoodsInfo",method = RequestMethod.POST)
+    //@RequestMapping(path = "addGoodsInfo",method = RequestMethod.POST)
+    @PostMapping("addGoodsInfo")
     private String addGoodsInfo(@RequestBody GoodsInfo goodsInfo){
       //  String token = (String) map.get("token");
      /*   String x = (String) map.get("data");
