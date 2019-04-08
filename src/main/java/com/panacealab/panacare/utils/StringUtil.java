@@ -21,9 +21,11 @@ public class StringUtil {
     }
 
     public static void main(String[] args) {
-        for (int i = 0; i < 999; i++) {
-            System.out.println("<item>" + i + "</item>");
-        }
+
+        System.out.println(getUUID());
+//        for (int i = 0; i < 999; i++) {
+//            System.out.println("<item>" + i + "</item>");
+//        }
         List<String> l = new ArrayList<String>();
         {
             int i = 0;

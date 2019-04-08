@@ -89,6 +89,7 @@ public class AppUpdateController {
     // 迅雷下载会报错 但不影响 判断是迅雷多线程的问题
     @RequestMapping("getInstallFile")
     private void getInstallFile(HttpServletResponse response) {
+        log.info("进入getInstallFile方法\n");
         FileInputStream inputStream = null;
         OutputStream outputStream = null;
         try {
@@ -104,8 +105,11 @@ public class AppUpdateController {
             response.setContentType("application/vnd.android.package-archive");
             File rootPath = new File(ResourceUtils.getURL("classpath:").getPath());
             String path = p.getProperty("panacare.update.path");
-            log.debug(path);
-            File file = new File(rootPath.getAbsolutePath() + path + "app-release.apk");
+            path=path.replace("/",File.separator);
+            log.debug(rootPath.getAbsolutePath()+path);
+            String pathname = rootPath.getAbsolutePath() + path + "app-release.apk";
+            log.debug(pathname);
+            File file = new File(pathname);
             response.addHeader("Content-Length", "" + file.length());
             //输入流：本地文件路径
             inputStream = new FileInputStream(file);
