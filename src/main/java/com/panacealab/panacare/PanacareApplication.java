@@ -8,24 +8,37 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+/**
+ * @author Administrator
+ */
 @SpringBootApplication
-/***
+/*
  * exclude = {MultipartAutoConfiguration.class}
  * 防止springboot 自动处理文件表单
  * */
 @EnableAutoConfiguration(exclude = {MultipartAutoConfiguration.class})
-//@MapperScan
-@EnableTransactionManagement //开启事务
-@EnableCaching //redis
+//开启事务
+@EnableTransactionManagement
+//redis
+@EnableCaching
+@EnableEurekaClient
+@RestController
 public class PanacareApplication {
 	private static Logger logger = LoggerFactory.getLogger("PanacareApplication");
+	@RequestMapping("/")
+	public String home() {
+		return "Hello world";
+	}
 	public static void main(String[] args) {
 		logger.info("Service Starting");
 		SpringApplication.run(PanacareApplication.class, args);
