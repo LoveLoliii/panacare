@@ -55,15 +55,27 @@ public class PUtils {
         String total  = bTotal.setScale(2,RoundingMode.HALF_UP).toString();
         System.out.println(total);
     }
+    static class T{
+        T(){}
+        int value;
 
+        @Override
+        public String toString() {
+            return String.valueOf(value);
+        }
+    }
     public static void main(String[] args) {
+       T t = new T();
+       t.value = 1;
+        changeT(t);
+        System.out.println(t);
       /*  for (int i=0;i<100;i++
              ) {
             bigDecimalTest();
         }*/
         //System.out.println(3|9);
 
-        int[] nums = new int[]{234,345,444,3344,1,50,4567,8954};
+      /*  int[] nums = new int[]{234,345,444,3344,1,50,4567,8954};
         for (int x: nums){
             new Thread(()->{
                 try {
@@ -73,9 +85,13 @@ public class PUtils {
                 }
                 System.out.println(x);
             }).start();
-        }
+        }*/
 
 
 
+    }
+
+    private static void changeT(T t) {
+        t.value =2;
     }
 }
