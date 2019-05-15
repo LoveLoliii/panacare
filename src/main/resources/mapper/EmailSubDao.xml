@@ -3,6 +3,10 @@
         PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.panacealab.panacare.dao.EmailSubDao">
+    <select id="query" resultType="com.panacealab.panacare.entity.EmailSubscribe">
+        select * from p_email_subscribe
+        where email=#{email}
+    </select>
     <insert id="insert" parameterType="String" >
         insert into p_email_subscribe (email)
         values(#{email})

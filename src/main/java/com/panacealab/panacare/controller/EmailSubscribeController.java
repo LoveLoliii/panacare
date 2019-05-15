@@ -18,8 +18,9 @@ public class EmailSubscribeController {
     private EmailSubService emailSubService;
     @RequestMapping("/email/subscribe/{email}")
     private String subscribeByEmail(@PathVariable(value = "email") String email) {
-        // check repeat( for after one)
+        // check repeat
         emailSubService.saveSubscribeEmail(email);
         return "success";
     }
+
 }
