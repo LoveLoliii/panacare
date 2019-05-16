@@ -1,5 +1,17 @@
 package com.panacealab.panacare.entity;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+/**
+ * @author Loveloliii
+ */
+@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class MailInfo {
     //邮箱服务器 如smtp.163.com
     private String host ;
@@ -16,7 +28,7 @@ public class MailInfo {
     //发送内容
     private String content ;
 
-    public String getHost() {
+/*    public String getHost() {
         return host;
     }
 
@@ -70,5 +82,5 @@ public class MailInfo {
 
     public void setContent(String content) {
         this.content = content;
-    }
+    }*/
 }
