@@ -24,6 +24,54 @@ public class MailSendUtil {
       private static String host="";
       private static String formName="";
       private static String password="";
+
+      // 发送一份邮件 返回发送结果(结果指是否向邮件服务器发出，非是否成功发送到达)
+    public static String sendMail(String content,String email,String subject) {
+        String rs ="success";
+        String css = "<style type='text/css'>/* table 样式 */\ntable {\n  border-top: 1px solid #ccc;\n" +
+                "  border-left: 1px solid #ccc;\n}\ntable td,\ntable th {\n" +
+                "  border-bottom: 1px solid #ccc;\n  border-right: 1px solid #ccc;\n" +
+                "  padding: 3px 5px;\n}\ntable th {\n  border-bottom: 2px solid #ccc;\n" +
+                "  text-align: center;\n}\n\n" +
+                "/* blockquote 样式 */\nblockquote {\n  display: block;\n" +
+                "  border-left: 8px solid #d0e5f2;\n  padding: 5px 10px;\n" +
+                "  margin: 10px 0;\n  line-height: 1.4;\n" +
+                "  font-size: 100%;\n background-color: #f1f1f1;\n}\n" +
+                "\n/* code 样式 */\ncode {\n  display: inline-block;\n" +
+                "  *display: inline;\n  *zoom: 1;\n  background-color: #f1f1f1;\n" +
+                "  border-radius: 3px;\n  padding: 3px 5px;\n  margin: 0 3px;\n" +
+                "}\npre code {\n  display: block;\n}\n\n/* ul ol 样式 */\n" +
+                "ul, ol {\n  margin: 10px 0 10px 20px;\n} </style>";
+        // 载入必要配置信息
+        Properties p = new Properties();
+        try {
+
+            p.load(MailTool.class.getResourceAsStream("/configure.properties"));
+            String formName = p.getProperty("panacare.mail");
+            String password = p.getProperty("panacare.key");
+            String host = p.getProperty("panacare.smtp", "smtp-mail.outlook.com");
+
+            String defaultHeader = "<html>\n<head>\n<meta http-equiv=\"Content-Type\" content=\"text/html; charset=utf-8\">\n"+css+"</head>\n" +
+                    "<body>\n"   ;
+            String end =  "</body>\n</html>";
+
+            MailInfo mailInfo = MailInfo
+                    .builder()
+                    .content(defaultHeader+ content+end)
+                    .formName(formName)
+                    .formPassword(password)
+                    .host(host)
+                    .replayAddress(email)
+                    .subject(subject)
+                    .toAddress(email)
+                    .build();
+            MailSendUtil.sendHtmlMail(mailInfo);
+        } catch (IOException e) {
+            e.printStackTrace();
+            rs = "fail";
+        }
+        return rs;
+    }
     //  private static String replayAddress="";
 //    public static  void main(String[] args){
 //
