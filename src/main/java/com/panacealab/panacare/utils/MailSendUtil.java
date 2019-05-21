@@ -141,9 +141,12 @@ public class MailSendUtil {
         final Properties p = System.getProperties();
         p.setProperty("mail.smtp.host", mailInfo.getHost());
         p.setProperty("mail.smtp.auth", "true");
-        p.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
+//        p.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");
         p.put("mail.smtp.socketFactory.fallback", "true");
         p.put("mail.smtp.starttls.enable", "true");
+        //邮箱发送服务器端口,这里设置为465端口
+//        p.setProperty("mail.smtp.port", "465");
+//        p.setProperty("mail.smtp.socketFactory.port", "465");
         p.setProperty("mail.smtp.user", mailInfo.getFormName());
         p.setProperty("mail.smtp.pass", mailInfo.getFormPassword());
         // 根据邮件会话属性和密码验证器构造一个发送邮件的session
