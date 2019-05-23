@@ -137,7 +137,7 @@ public class MailSendUtil {
 
     }
 
-    private static Message getMessage(MailInfo mailInfo) {
+    private static  Message getMessage(MailInfo mailInfo) {
         final Properties p = System.getProperties();
         p.setProperty("mail.smtp.host", mailInfo.getHost());
         p.setProperty("mail.smtp.auth", "true");
