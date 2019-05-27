@@ -1,15 +1,13 @@
 package com.panacealab.panacare.controller;
 
-import com.panacealab.panacare.entity.MailInfo;
 import com.panacealab.panacare.service.EmailSubService;
 import com.panacealab.panacare.utils.MailSendUtil;
-import com.panacealab.panacare.utils.MailTool;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 /**
  * email related
@@ -18,15 +16,20 @@ import java.util.Properties;
  * @date 2019/5/13.
  */
 @RestController
+@Slf4j
 public class EmailSubscribeController {
     @Autowired
     private EmailSubService emailSubService;
 
+    @CrossOrigin
     @RequestMapping("/email/subscribe/{email}")
-    private String subscribeByEmail(@PathVariable(value = "email") String email) {
+    private Map subscribeByEmail(@PathVariable(value = "email") String email) {
         // check repeat
         emailSubService.saveSubscribeEmail(email);
-        return "success";
+        Map<String,String> rs = new HashMap<String,String>(2);
+        rs.put("rs","success");
+        log.info("rs",rs);
+        return rs;
     }
     /**
      * 因为向所有人发送邮件具有敏感性 所以使用一次性token的方式作为验证方案
