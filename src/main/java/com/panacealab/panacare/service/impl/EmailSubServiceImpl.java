@@ -20,12 +20,13 @@ public class EmailSubServiceImpl implements EmailSubService {
 private EmailSubDao emailSubDao;
 private Logger logger = LoggerFactory.getLogger(this.getClass().getName());
     @Override
-    public void saveSubscribeEmail(String email) {
+    public void saveSubscribeEmail(String email,String cr) {
         List<EmailSubscribe> emailSubscribeList = emailSubDao.query(email);
         if(emailSubscribeList.size()!=0 && emailSubscribeList.get(0).getEmail().toLowerCase().equals(email.toLowerCase())){
            logger.error("sub email is exist.");
         }else {
-            emailSubDao.insert(email);
+            String time = String.valueOf(System.currentTimeMillis());
+            emailSubDao.insert(email,time,cr);
         }
 
     }

@@ -20,12 +20,15 @@ import java.util.Map;
 public class EmailSubscribeController {
     @Autowired
     private EmailSubService emailSubService;
-
+    /**
+     * @param email 邮件
+     * @param cr country/region
+     * */
     @CrossOrigin
-    @RequestMapping("/email/subscribe/{email}")
-    private Map subscribeByEmail(@PathVariable(value = "email") String email) {
+    @RequestMapping("/email/subscribe/{email}/{cr}")
+    private Map subscribeByEmail(@PathVariable(value = "email") String email,@PathVariable(value = "cr") String cr) {
         // check repeat
-        emailSubService.saveSubscribeEmail(email);
+        emailSubService.saveSubscribeEmail(email,cr);
         Map<String,String> rs = new HashMap<String,String>(2);
         rs.put("rs","success");
         log.info("rs",rs);

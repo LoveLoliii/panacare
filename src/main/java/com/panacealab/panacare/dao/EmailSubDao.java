@@ -14,8 +14,10 @@ public interface EmailSubDao {
     /**
      * 向数据库插入邮箱记录
      * @param email 邮箱
+     * @param time 时间
+     * @param cr country/region
      * */
-    void insert(String email);
+    void insert(String email,String time,String cr);
 
     /**
      * 查询某一邮箱信息

@@ -8,7 +8,7 @@
         where email=#{email}
     </select>
     <insert id="insert" parameterType="String" >
-        insert into p_email_subscribe (email)
-        values(#{email})
+        insert into p_email_subscribe (email,sub_time,cr)
+        values(#{email},#{time},#{cr})
     </insert>
 </mapper>

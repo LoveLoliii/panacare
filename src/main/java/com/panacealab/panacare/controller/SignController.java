@@ -28,6 +28,7 @@ public class SignController {
     private Map appSign(@RequestBody Map map){
        Gson g = new Gson();
         UserInfo u = g.fromJson(String.valueOf(map.get("user_info")),UserInfo.class);
+        u.setUser_register_time(String.valueOf(System.currentTimeMillis()));
         String mail = (String) map.get("mail");
         String code = (String) map.get("code");
         String state = signService.sign(u,mail,code);
