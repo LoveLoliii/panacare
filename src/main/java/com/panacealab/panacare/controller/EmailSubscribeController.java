@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 /**
  * email related
@@ -27,10 +28,19 @@ public class EmailSubscribeController {
     @CrossOrigin
     @RequestMapping("/email/subscribe/{email}/{cr}")
     private Map subscribeByEmail(@PathVariable(value = "email") String email,@PathVariable(value = "cr") String cr) {
-        // check repeat
-        emailSubService.saveSubscribeEmail(email,cr);
+        //    对邮箱格式以及country/region 进行检查
+        String pattern ="^\\w+([-+.]\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*$";
+        boolean isEmail = Pattern.matches(pattern,email);
+        boolean isCR = "CN".equals(cr)|| "US".equals(cr);
+        log.info("email is correct :"+isEmail);
         Map<String,String> rs = new HashMap<String,String>(2);
-        rs.put("rs","success");
+        if(isEmail && isCR){
+            // check repeat
+            emailSubService.saveSubscribeEmail(email,cr);
+            rs.put("rs","success");
+        }else {
+            rs.put("rs","error");
+        }
         log.info("rs",rs);
         return rs;
     }
