@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.panacealab.panacare.entity.DeviceData">
+    <insert id="save" parameterType="com.panacealab.panacare.entity.DeviceData">
+        insert into p_device_data (user_uniq_id,mac,total_time,fsr_min,fsr_max,motor_mode,hardware_revision,firmware_revision,power,update_time,reserve)
+        values (#{user_uniq_id},#{mac},#{total_time},#{fsr_min},#{fsr_max},#{motor_mode},#{hardware_revision},#{firmware_revision},#{power},#{update_time},#{reserve})
+    </insert>
+</mapper>
