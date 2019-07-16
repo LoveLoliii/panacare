@@ -21,4 +21,10 @@ public interface LoginService {
      * @return Map
      */
     Map adminCheck(String account, String pwd);
+    /**
+     * 检查是否存在这样的openId
+     * @param openid 唯一用户标识
+     * @return 是否存在
+     * */
+    boolean isExist(String openid);
 }

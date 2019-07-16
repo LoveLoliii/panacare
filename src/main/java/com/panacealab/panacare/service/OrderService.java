@@ -8,7 +8,7 @@ import java.util.Map;
 public interface OrderService {
     Map saveOrder(String goods_uniq_id, String counts, String order_number, String order_state, String order_created_time);
 
-    Map createWXPayOrder(String user_uniq_id, String order_number);
+  /*  Map createWXPayOrder(String user_uniq_id, String order_number);*/
 
     OrderInfo queryByUID(String out_trade_no);
 

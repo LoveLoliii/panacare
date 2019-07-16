@@ -52,7 +52,8 @@ public class OrderServiceImpl implements OrderService {
         return map;
     }
 
-    @Override
+
+/* @Override
     public Map createWXPayOrder(String user_uniq_id, String order_number) {
         Map map = new HashMap();
         // 检查订单状态
@@ -85,7 +86,7 @@ public class OrderServiceImpl implements OrderService {
             parameters.put("sign", sign); // 封装请求参数结束
              String requestXML = PayCommonUtil.getRequestXml(parameters); // 获取xml结果);
             // 调用统一下单接口
-            String result = PayCommonUtil.httpsRequest(PropertyUtil.getInstance().getProperty("WxPay.payURL"), "POST",
+            String result = PayCommonUtil.httpsRequest(PropertyUtil.get("/pay.properties","WxPay.payURL",""), "POST",
                     requestXML);
             logger.debug("调用统一下单接口：" + result);
             SortedMap<Object, Object> parMap = PayCommonUtil.startWXPay(result);
@@ -104,6 +105,7 @@ public class OrderServiceImpl implements OrderService {
 
         return map;
     }
+*/
 
 
     @Override

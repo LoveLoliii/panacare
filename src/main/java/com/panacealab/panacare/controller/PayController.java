@@ -44,10 +44,10 @@ public class PayController {
         String orderNumber = (String) paramsMap.get("out_trade_no");
         try {
             // 支付宝配置
-            AlipayConfig alipayConfig = new AlipayConfig();
+         //   AlipayConfig alipayConfig = new AlipayConfig();
             // 调用SDK验证签名
-            boolean signVerified = AlipaySignature.rsaCheckV1(params, PropertyUtil.t("A.aliPublicKey"),
-                    PropertyUtil.t("A.CHARSET"), PropertyUtil.t("A.signType"));
+            boolean signVerified = AlipaySignature.rsaCheckV1(params, PropertyUtil.get("/pay.properties","A.aliPublicKey",""),
+                    PropertyUtil.get("/pay.properties","A.CHARSET",""), PropertyUtil.get("/pay.properties","A.signType",""));
             if (signVerified) {
                 logger.info("支付宝回调签名认证成功");
                 // 按照支付结果异步通知中的描述，对支付结果中的业务内容进行1\2\3\4二次校验，校验成功后在response中返回success，校验失败返回failure
@@ -111,7 +111,7 @@ public class PayController {
         // 第三步可根据实际情况省略
 
         // 4、验证app_id是否为该商户本身。
-        if (!params.get("app_id").equals(PropertyUtil.t("A.appId"))) {
+        if (!params.get("app_id").equals(PropertyUtil.get("/pay.properties","A.appId",""))) {
             throw new AlipayApiException("app_id不一致");
         }
     }
@@ -168,11 +168,11 @@ public class PayController {
         OrderInfo orderInfo = g.fromJson(String.valueOf(map.get("orderInfo")).trim(), OrderInfo.class);
 
 
-        String privateKey = PropertyUtil.t("A.appPrivateKey");
+        String privateKey = PropertyUtil.get("/pay.properties","A.appPrivateKey","");
         Map<String, String> params = new HashMap<String, String>();
         boolean rsa2 = (privateKey.length() > 0);
-        params = PayCommonUtil.buildOrderParamMap(PropertyUtil.t("A.appIdDev"), rsa2, "{\"timeout_express\":\"30m\",\"product_code\":\"QUICK_MSECURITY_PAY\",\"total_amount\":\"0.01\",\"subject\":\"1\",\"body\":\"我是测试数据\",\"out_trade_no\":\"" + "222222" + "\"}");//TODO 获取订单号getOutTradeNo()
-        privateKey = rsa2 ? privateKey : PropertyUtil.t("A.appPrivateKeyRSA1");
+        params = PayCommonUtil.buildOrderParamMap(PropertyUtil.get("/pay.properties","A.appIdDev",""), rsa2, "{\"timeout_express\":\"30m\",\"product_code\":\"QUICK_MSECURITY_PAY\",\"total_amount\":\"0.01\",\"subject\":\"1\",\"body\":\"我是测试数据\",\"out_trade_no\":\"" + "222222" + "\"}");//TODO 获取订单号getOutTradeNo()
+        privateKey = rsa2 ? privateKey : PropertyUtil.get("/pay.properties","A.appPrivateKeyRSA1","");
         String sign = PayCommonUtil.getSign(params, privateKey, rsa2);
         String orderParam = PayCommonUtil.buildOrderParam(params);
         final String aliOrderInfo = orderParam + "&" + sign;
@@ -245,12 +245,12 @@ public class PayController {
         payService.saveOrder(orderInfo);
         try {
             //实例化客户端（参数：网关地址、商户appid、商户私钥、格式、编码、支付宝公钥、加密类型），为了取得预付订单信息
-            String a = PropertyUtil.t("A.getWayPath");
-            String b = PropertyUtil.t("A.appId");
-            String c = PropertyUtil.t("A.appPrivateKey");
-            String d = PropertyUtil.t("A.CHARSET");
-            String e = PropertyUtil.t("A.aliPublicKey");
-            String f = PropertyUtil.t("A.signType");
+            String a = PropertyUtil.get("/pay.properties","A.getWayPath","");
+            String b = PropertyUtil.get("/pay.properties","A.appId","");
+            String c = PropertyUtil.get("/pay.properties","A.appPrivateKey","");
+            String d = PropertyUtil.get("/pay.properties","A.CHARSET","");
+            String e = PropertyUtil.get("/pay.properties","A.aliPublicKey","");
+            String f = PropertyUtil.get("/pay.properties","A.signType","");
             System.out.println(a + b + c + d + e + f);
             AlipayClient alipayClient = new DefaultAlipayClient(a, b,c,"JSON", d,e, f);
             //实例化具体API对应的request类,类名称和接口名称对应,当前调用接口名称：alipay.trade.app.pay
@@ -272,9 +272,9 @@ public class PayController {
             //销售产品码（固定值）
             model.setProductCode("QUICK_MSECURITY_PAY");
             ali_request.setBizModel(model);
-            logger.info("异步通知的地址为：" + PropertyUtil.t("A.notifyUrl"));
+            logger.info("异步通知的地址为：" + PropertyUtil.get("/pay.properties","A.notifyUrl",""));
             //异步回调地址（后台）
-            ali_request.setNotifyUrl(PropertyUtil.t("A.notifyUrl"));
+            ali_request.setNotifyUrl(PropertyUtil.get("/pay.properties","A.notifyUrl",""));
             // 这里和普通的接口调用不同，使用的是sdkExecute  返回支付宝订单信息(预处理)
             AlipayTradeAppPayResponse alipayTradeAppPayResponse = alipayClient.sdkExecute(ali_request);
             //就是orderString 可以直接给APP请求，无需再做处理。

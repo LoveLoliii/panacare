@@ -60,9 +60,9 @@ public class AppUpdateController {
     Map uploadNewAppFile(HttpServletRequest httpServletRequest) throws IOException {
         log.info("进入uploadNewAppFile方法\n");
         Map rsMap = new HashMap(2);
-        Properties p = PropertyUtil.Singleton.INSTANCE.getProperties();
-        p.load(AppUpdateController.class.getResourceAsStream("/configure.properties"));
-        String path = p.getProperty("panacare.update.path");
+        Properties p = null;
+       // p.load(AppUpdateController.class.getResourceAsStream("/configure.properties"));
+        String path = PropertyUtil.get("/configure.properties","panacare.update.path","");
         boolean saveResult = FileUtil.saveFile(httpServletRequest, path);
         if (saveResult) {
             rsMap.put("state", StateCode.DATA_RETURN_SUCCESS);
@@ -100,11 +100,12 @@ public class AppUpdateController {
             // 设定输出文件头
             response.setHeader("Content-disposition", "attachment; filename=" + resultFileName);
             // 定义输出类型
-            Properties p = PropertyUtil.Singleton.INSTANCE.getProperties();
-            p.load(AppUpdateController.class.getResourceAsStream("/configure.properties"));
+           // Properties p = PropertyUtil.Singleton.INSTANCE.getProperties();
+          //  p.load(AppUpdateController.class.getResourceAsStream("/configure.properties"));
             response.setContentType("application/vnd.android.package-archive");
             File rootPath = new File(ResourceUtils.getURL("classpath:").getPath());
-            String path = p.getProperty("panacare.update.path");
+            String path =PropertyUtil.get("/configure.properties","panacare.update.path","") ;
+            // p.getProperty("panacare.update.path");
             path=path.replace("/",File.separator);
             log.debug(rootPath.getAbsolutePath()+path);
             String pathname = rootPath.getAbsolutePath() + path + "app-release.apk";

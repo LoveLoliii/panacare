@@ -9,13 +9,13 @@ import java.util.Properties;
 public class PropertyUtil {
     // 存在线程不安全的问题
     public static Properties instance;
-    public static Properties getInstance() {
+    public static Properties getInstance(String fn) {
        if(instance == null){
            instance = new Properties();
            //
           // ;
            try {
-               instance.load(FileUtil.class.getResourceAsStream("/pay.properties"));
+               instance.load(FileUtil.class.getResourceAsStream(fn));
            }catch (Exception e){
 
            }
@@ -23,7 +23,7 @@ public class PropertyUtil {
        return instance;
     }
 
-    public enum Singleton{
+    private enum Singleton{
         /**
          * 单例
          * */
@@ -36,8 +36,8 @@ public class PropertyUtil {
 
     }
 
-    public static String t(String s) {
+    public static String get(String fn,String k, String dv) {
         Properties p = Singleton.INSTANCE.getProperties();
-        return PropertyUtil.getInstance().getProperty(s);
+        return PropertyUtil.getInstance(fn).getProperty(k,dv);
     }
 }

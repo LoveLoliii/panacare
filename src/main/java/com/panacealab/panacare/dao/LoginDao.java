@@ -1,6 +1,7 @@
 package com.panacealab.panacare.dao;
 
 import com.panacealab.panacare.entity.UserInfo;
+import com.panacealab.panacare.entity.WxUserInfo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Result;
 import org.apache.ibatis.annotations.Results;
@@ -36,4 +37,11 @@ public interface LoginDao {
      * */
     @Select("SELECT * FROM user_info where user_mail= #{account} and user_authority > 9")
     List<UserInfo> queryWithPermission(String mail, String account);
+    /**
+     * 通过openID获取第三方表的用户信息
+     * @param openid 微信唯一用户标识
+     * @return wx用户信息
+     * */
+    @Select("SELECT * FROM wx_user_info where opnid =#{openid}")
+    WxUserInfo queryWxUserInfo(String openid);
 }

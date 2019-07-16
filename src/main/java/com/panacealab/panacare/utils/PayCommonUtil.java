@@ -28,17 +28,17 @@ public class PayCommonUtil
      */
     public static AlipayClient getAliClient()
     {
-        AlipayClient alipayClient = new DefaultAlipayClient(PropertyUtil.getInstance().getProperty("AliPay.payURL"),
-                PropertyUtil.getInstance().getProperty("AliPay.appId"),
-                PropertyUtil.getInstance().getProperty("AliPay.privateKey"), "json", "utf-8",
-                PropertyUtil.getInstance().getProperty("AliPay.publicKey"), "RSA2");
+        AlipayClient alipayClient = new DefaultAlipayClient(PropertyUtil.get("/pay.properties","A.getWayPath",""),
+                PropertyUtil.get("/pay.properties","A.appId",""),
+                PropertyUtil.get("/pay.properties","A.aliPublicKey",""),"json", "utf-8",
+                PropertyUtil.get("/pay.properties","A.A.appPrivateKey",""), "RSA2");
         return alipayClient;
     }
 
     /**
      * 创建微信交易对象
      */
-    public static SortedMap<Object, Object> getWXPrePayID()
+/*    public static SortedMap<Object, Object> getWXPrePayID()
     {
         SortedMap<Object, Object> parameters = new TreeMap<Object, Object>();
         parameters.put("appid", PropertyUtil.getInstance().getProperty("WxPay.appid"));
@@ -48,12 +48,12 @@ public class PayCommonUtil
         parameters.put("notify_url", PropertyUtil.getInstance().getProperty("WxPay.notifyurl"));
         parameters.put("trade_type", "APP");
         return parameters;
-    }
+    }*/
 
     /**
      * 再次签名，支付
      */
-    public static SortedMap<Object, Object> startWXPay(String result)
+/*    public static SortedMap<Object, Object> startWXPay(String result)
     {
         try
         {
@@ -75,7 +75,7 @@ public class PayCommonUtil
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
 
     /**
      * 创建随机数
@@ -100,7 +100,7 @@ public class PayCommonUtil
      *
      * @return boolean
      */
-    public static boolean isTenpaySign(String characterEncoding, SortedMap<Object, Object> packageParams)
+   /* public static boolean isTenpaySign(String characterEncoding, SortedMap<Object, Object> packageParams)
     {
         StringBuffer sb = new StringBuffer();
         Set es = packageParams.entrySet();
@@ -121,7 +121,7 @@ public class PayCommonUtil
         String tenpaySign = ((String) packageParams.get("sign")).toLowerCase();
         // System.out.println(tenpaySign + " " + mysign);
         return tenpaySign.equals(mysign);
-    }
+    }*/
 
     /**
      * 创建sign签名
@@ -131,7 +131,7 @@ public class PayCommonUtil
      *            请求参数
      * @return
      */
-    public static String createSign(String characterEncoding, SortedMap<Object, Object> parameters)
+   /* public static String createSign(String characterEncoding, SortedMap<Object, Object> parameters)
     {
         StringBuffer sb = new StringBuffer();
         Set es = parameters.entrySet();
@@ -149,7 +149,7 @@ public class PayCommonUtil
         sb.append("key=" + PropertyUtil.getInstance().getProperty("WxPay.key"));
         String sign = MD5Util.MD5Encode(sb.toString(), characterEncoding).toUpperCase();
         return sign;
-    }
+    }*/
 
     /**
      * 将请求参数转换为xml格式的string
@@ -420,6 +420,7 @@ public class PayCommonUtil
             try {
                 new PrintWriter(new BufferedWriter(new FileWriter(
                         path, true)), true).println(new Object() {
+                    @Override
                     public String toString() {
                         StringWriter stringWriter = new StringWriter();
                         PrintWriter writer = new PrintWriter(stringWriter);

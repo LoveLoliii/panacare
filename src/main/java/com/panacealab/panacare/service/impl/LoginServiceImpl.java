@@ -3,6 +3,7 @@ package com.panacealab.panacare.service.impl;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.panacealab.panacare.dao.LoginDao;
 import com.panacealab.panacare.entity.UserInfo;
+import com.panacealab.panacare.entity.WxUserInfo;
 import com.panacealab.panacare.service.IRedisService;
 import com.panacealab.panacare.service.LoginService;
 import com.panacealab.panacare.utils.StateCode;
@@ -117,6 +118,13 @@ public class LoginServiceImpl implements LoginService {
         //用户不存在，返回失败信息
         resultMap.put("state", StateCode.USER_NOT_EXIST);
         return resultMap;
+    }
+
+    @Override
+    public boolean isExist(String openid) {
+        WxUserInfo wxUserInfo = loginDao.queryWxUserInfo(openid);
+
+        return wxUserInfo != null;
     }
 
 

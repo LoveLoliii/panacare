@@ -8,7 +8,7 @@ import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.servlet.MultipartAutoConfiguration;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+/*import org.springframework.cloud.netflix.eureka.EnableEurekaClient; 暂时去掉eureka相关 因为用不到*/
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -31,7 +31,7 @@ import org.springframework.web.filter.CorsFilter;
 @EnableTransactionManagement
 //redis
 @EnableCaching
-@EnableEurekaClient
+//@EnableEurekaClient
 @RestController
 public class PanacareApplication {
 	private static Logger logger = LoggerFactory.getLogger("PanacareApplication");

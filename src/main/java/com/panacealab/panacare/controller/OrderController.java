@@ -66,7 +66,7 @@ public class OrderController {
      * @param order_number 订单编号
      *
      * */
-    @RequestMapping("createWXPayOrder")
+  /*  @RequestMapping("createWXPayOrder")
     private Map createWXPayOrder(@RequestParam(name = "token",required = false) String token,@RequestParam String order_number){
         Map map = new HashMap(16);
         String code = new TokenUtil().checkTokenWithRedis(token);
@@ -76,14 +76,14 @@ public class OrderController {
         String user_uniq_id = TokenUtil.getTokenValues(token);
         map = orderService.createWXPayOrder(user_uniq_id,order_number);
         return map;
-    }
+    }*/
 
 
     /***
      *用于接受微信服务器返回的异步消息
      * */
 
-    @RequestMapping(name = "wxPayNotify",method = RequestMethod.POST)
+/*    @RequestMapping(name = "wxPayNotify",method = RequestMethod.POST)
     private void wxPayNotify(@RequestParam HttpServletRequest request, @RequestParam HttpServletResponse response){
         try {
             String result = PayCommonUtil.reciverWx(request);
@@ -163,5 +163,5 @@ public class OrderController {
         }
 
 
-    }
+    }*/
 }
