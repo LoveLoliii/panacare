@@ -4,10 +4,19 @@ package com.panacealab.panacare.entity;
 
 //import javax.persistence.*;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.io.Serializable;
 
 /*@Entity
 @Table(name = "user_info")*/
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class UserInfo implements Serializable {
     private static final long serialVersionUID = 1L;
     private Integer user_id;
@@ -26,7 +35,7 @@ public class UserInfo implements Serializable {
     private Integer user_authority;
 /*    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)*/
-    public Integer getUser_id() {
+  /*  public Integer getUser_id() {
         return user_id;
     }
 
@@ -136,9 +145,9 @@ public class UserInfo implements Serializable {
 
     public void setUser_authority(Integer user_authority) {
         this.user_authority = user_authority;
-    }
+    }*/
 
-    @Override
+  /*  @Override
     public String toString() {
         return "UserInfo{" +
                 "user_id=" + user_id +
@@ -154,5 +163,5 @@ public class UserInfo implements Serializable {
                 ", user_address='" + user_address + '\'' +
                 ", user_validity=" + user_validity +
                 '}';
-    }
+    }*/
 }

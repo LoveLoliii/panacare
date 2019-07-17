@@ -27,4 +27,20 @@ public interface LoginService {
      * @return 是否存在
      * */
     boolean isExist(String openid);
+    /**
+     * 获取登陆态
+     * @param openid 1
+     * @return 返回token
+     * */
+    String getWxLoginState(String openid);
+
+    /**
+     * 第一次使用的微信用户进行登陆
+     * @param openid uid
+     * @param sk secret_key
+     * @param un user name
+     * @param sex 性别
+     *
+     * */
+    void registerWxUser(String openid,String sk,String un,String sex);
 }

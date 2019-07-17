@@ -52,7 +52,15 @@ private final static Logger logger= LoggerFactory.getLogger("LoginController") ;
      * @return
      */
     @RequestMapping(path="/weappLogin",method = RequestMethod.GET)
-    private String  weappLogin(@RequestParam String code){
+    private String  weappLogin(@RequestParam String code,@RequestParam String user_name,@RequestParam String sex){
+        //转换一下性别 性别 0：未知、1：男、2：女
+        if(sex == "0"){
+            sex = "未知";
+        }else  if(sex == "1"){
+            sex = "男";
+        }else{
+            sex = "女" ;
+        }
         AsyncHttpClient asyncHttpClient = asyncHttpClient();
         String appid = PropertyUtil.get("","","wxa011cc0e920d6d8b");
         String secret = PropertyUtil.get("","","192fd71d9dcf0d78140c353639ab796b");
@@ -79,18 +87,27 @@ private final static Logger logger= LoggerFactory.getLogger("LoginController") ;
             //    对比第三方表是否有此ID
             boolean exist = loginService.isExist(openid);
             if(exist){
-                // todo（通过第三方表获取uuid，从主表获取信息。），创建登陆态
+                // todo（通过第三方表获取uuid，从主表获取信息。），创建登陆态 ====> 获取一个token
+                String token = loginService.getWxLoginState(openid);
                 //fixme 返回的token 需要考虑邮箱的问题 loginService.check().
-
+                    return token;
             }else {
                 // 建立信息 分别为第三方登陆表和主用户表建立用户信息
-
+                loginService.registerWxUser(openid,sessionKey,user_name,sex);
+                try{
+                    String token = loginService.getWxLoginState(openid);
+                    return token;
+                }catch (Exception e){
+                    // 防止这里被回滚
+                    e.printStackTrace();
+                    return "";
+                }
             }
         }else{
             // 无法获取到openID 处理错误
             return "error";
         }
-    return  rs.get();
+    //return  rs.get();
     }
 
     @CrossOrigin

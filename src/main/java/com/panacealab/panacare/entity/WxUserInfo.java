@@ -17,6 +17,7 @@ public class WxUserInfo {
     private Integer id;
     private String user_uniq_id;
     private String openid;
+    private String secret_key;
     private String user_phone_num;
 
 }

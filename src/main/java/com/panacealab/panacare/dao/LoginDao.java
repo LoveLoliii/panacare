@@ -2,10 +2,7 @@ package com.panacealab.panacare.dao;
 
 import com.panacealab.panacare.entity.UserInfo;
 import com.panacealab.panacare.entity.WxUserInfo;
-import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Result;
-import org.apache.ibatis.annotations.Results;
-import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.*;
 
 import java.util.List;
 
@@ -42,6 +39,33 @@ public interface LoginDao {
      * @param openid 微信唯一用户标识
      * @return wx用户信息
      * */
-    @Select("SELECT * FROM wx_user_info where opnid =#{openid}")
+    @Select("SELECT * FROM wx_user_info where openid =#{openid}")
     WxUserInfo queryWxUserInfo(String openid);
+
+    /**
+     * 通过user_uniq_id获取用户信息
+     * @param user_uniq_id  uid
+     * @return UserInfo
+     * */
+    @Select("SELECT * FROM user_info where user_uniq_id = #{user_uniq_id}")
+    UserInfo queryByUniqId(String user_uniq_id);
+
+
+    /**
+     * 保存用户信息
+     * @param userInfo 主用户表信息
+     * @return 插入数量?(maybe)
+     * */
+    @Insert("INSERT INTO user_info(user_uniq_id,user_name,user_pwd,user_sex,user_both,user_mail,user_register_time,user_condition_code,user_referee,user_phone_num,user_address)VALUES(" +
+            "#{user_uniq_id},#{user_name},#{user_pwd},#{user_sex},#{user_both},#{user_mail},#{user_register_time},#{user_condition_code}," +
+            "#{user_referee},#{user_phone_num},#{user_address})")
+    int insertUser(UserInfo userInfo);
+
+    /**
+     * 保存微信用户信息
+     * @param wxUserInfo  微信用户信息
+     * @return 返回影响的数量
+     * */
+    @Insert("INSERT INTO wx_user_info (user_uniq_id,openid,secret_key)VALUES(#{user_uniq_id},#{openid},#{secret_key})")
+    int insertWxUser(WxUserInfo wxUserInfo);
 }
