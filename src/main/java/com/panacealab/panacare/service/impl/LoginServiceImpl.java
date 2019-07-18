@@ -138,6 +138,12 @@ public class LoginServiceImpl implements LoginService {
         String token="";
         try {
             token = TokenUtil.createToken(userInfo);
+
+            //更新redis数据
+            //删除与用户uniq_id相同的key
+            iRedisService.remove(userInfo.getUser_uniq_id());
+            //放入新的key/value
+            iRedisService.put(userInfo.getUser_uniq_id(), token, Integer.valueOf(ex));
         } catch (IOException e) {
             e.printStackTrace();
             log.error(e.getMessage());

@@ -144,7 +144,9 @@ public class StateCode {
     public static final String VERITY_CODE_EXPIRE = "545";
     public static final String VERITY_CODE_ERROR = "544";
     public static final String UPLOAD_FAILED = "561";
-
+    public static final String BUSINESS_SUCCESS="888";
+    public static final String WX_REGISTER_ERROR="541";
+    public static final String WX_NOOPENID_ERROR="540";
 
     /**
      * 交易状态
