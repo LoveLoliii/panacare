@@ -19,12 +19,13 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 /**
- * @author Administrator
+ * @author Loveloliii
+ *
  */
 @SpringBootApplication
 /*
  * exclude = {MultipartAutoConfiguration.class}
- * 防止springboot 自动处理文件表单
+ * 防止SpringBoot 自动处理文件表单
  * */
 @EnableAutoConfiguration(exclude = {MultipartAutoConfiguration.class})
 //开启事务

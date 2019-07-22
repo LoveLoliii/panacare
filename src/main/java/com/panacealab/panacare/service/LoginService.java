@@ -43,4 +43,9 @@ public interface LoginService {
      *
      * */
     void registerWxUser(String openid,String sk,String un,String sex);
+    /**
+     * 更新微信用户login的sessionKey\
+     * @param sessionKey 
+     * */
+    void updateSessionKey(String sessionKey);
 }
