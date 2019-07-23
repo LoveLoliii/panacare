@@ -68,4 +68,11 @@ public interface LoginDao {
      * */
     @Insert("INSERT INTO wx_user_info (user_uniq_id,openid,secret_key)VALUES(#{user_uniq_id},#{openid},#{secret_key})")
     int insertWxUser(WxUserInfo wxUserInfo);
+    /**
+     * 更新用户会话密钥
+     * @param openid  微信用户唯一标识
+     * @param sessionKey 会话密钥
+     * */
+    @Update("UPDATE INTO wx_user_info SET secret_key = #{sessionKey} where openid = #{openid}")
+    void updateSK(String openid, String sessionKey);
 }

@@ -176,5 +176,10 @@ public class LoginServiceImpl implements LoginService {
 
     }
 
+    @Override
+    public void updateSessionKey(String openid,String sessionKey) {
+            loginDao.updateSK(openid,sessionKey);
+    }
+
 
 }

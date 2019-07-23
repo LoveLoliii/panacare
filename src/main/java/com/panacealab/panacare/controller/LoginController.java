@@ -105,7 +105,7 @@ public class LoginController {
                     // （通过第三方表获取uuid，从主表获取信息。），创建登陆态 ====> 获取一个token
                     String token = loginService.getWxLoginState(openid);
                     // 更新sessionKey
-                    loginService.updateSessionKey(sessionKey);
+                    loginService.updateSessionKey(openid,sessionKey);
                     //fixme 返回的token 需要考虑邮箱的问题 loginService.check().
                     rsMap.put("state", StateCode.BUSINESS_SUCCESS);
                     rsMap.put("data", token);
